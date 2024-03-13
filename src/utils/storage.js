@@ -30,9 +30,9 @@ let isCacheEnabled = CACHE === 'false' ? false : CACHE;
  *                                     *
  * * * * * * * * * * * * * * * * * * * */
 
-const remember = async (key, value) => {
+const remember = (key, value) => {
   if (isCacheEnabled) {
-    await localStorage.setItem(key.slice(0, MAX_STORAGE_KEY_LENGTH), value);
+    localStorage.setItem(key.slice(0, MAX_STORAGE_KEY_LENGTH), value);
   }
 };
 
@@ -44,7 +44,7 @@ const remember = async (key, value) => {
  *                                     *
  * * * * * * * * * * * * * * * * * * * */
 
-const forget = async () => localStorage.clear();
+const forget = () => localStorage.clear();
 
 /* * * * * * * * * * * * * * * * * * * *
  *                                     *
