@@ -44,9 +44,9 @@ import {
   DEFAULT_ANSWER,
   DALLE_ERROR,
   llmLogPrefix,
-  gptVersion,
+  languageModel,
   gptLogPrefix,
-  dalleVersion,
+  imageModel,
   dalleLogPrefix,
   waiting,
   imagePromptPrefix,
@@ -61,7 +61,7 @@ import { KNOWLEDGE_URI } from '../utils/persona.js';
 dotenv.config();
 
 const {
-  DALLE_VERSION,
+  IMAGE_MODEL,
   DELAY
 } = process.env;
 
@@ -219,12 +219,12 @@ const ArthasGPT = async (
 
         remember(queryString, messageResponse);
       } catch (error) {
-        log(`${gptVersion} error: ${error?.message}`);
+        log(`${languageModel} error: ${error?.message}`);
         messageResponse = error?.message;
       }
 
       if (isVerbose) {
-        log(`${gptVersion} responded with "${messageResponse}".`);
+        log(`${languageModel} responded with "${messageResponse}".`);
         log(waiting);
       }
 
@@ -267,7 +267,7 @@ const ArthasGPT = async (
 
       try {
         const dalleResponse = await imageAgent.images.generate({
-          model: DALLE_VERSION,
+          model: IMAGE_MODEL,
           prompt: dallePrompt,
           size: `${IMAGE_SIZE}x${IMAGE_SIZE}`,
           quality: IMAGE_QUALITY,
@@ -278,7 +278,7 @@ const ArthasGPT = async (
 
         remember(messageResponse, imgResponse);
       } catch (error) {
-        log(`${dalleVersion} error: ${error?.message}`);
+        log(`${imageModel} error: ${error?.message}`);
         imgResponse = null;
       }
 

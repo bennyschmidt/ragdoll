@@ -26,7 +26,7 @@ import {
   GOODBYE,
   BYE,
   EXIT,
-  gptVersion,
+  languageModel,
   gptLogPrefix,
   waiting,
   placeholder,
@@ -113,7 +113,7 @@ const UIArthasGPT = async greeting => {
       remember(input, messageResponse);
 
       if (isVerbose) {
-        log(`${gptVersion} responded with "${messageResponse}".`);
+        log(`${languageModel} responded with "${messageResponse}".`);
         log(waiting);
       }
 

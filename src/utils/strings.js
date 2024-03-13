@@ -10,9 +10,9 @@ import {
 dotenv.config();
 
 const {
-  LLM_VERSION,
-  GPT_VERSION,
-  DALLE_VERSION,
+  LLM_FRAMEWORK,
+  LANGUAGE_MODEL,
+  IMAGE_MODEL,
   DELAY,
   GREETING
 } = process.env;
@@ -36,12 +36,12 @@ const BYE = 'bye';
 const EXIT = 'exit';
 const DALLE_ERROR = 'DALL-E failed to return an image. This could be due to a safety violation, rate limiting, or a network issue.';
 
-const llmVersion = `LLM (${LLM_VERSION})`;
-const llmLogPrefix = `${llmVersion} query:`;
-const gptVersion = `ChatGPT (${GPT_VERSION})`;
-const gptLogPrefix = `${gptVersion} Prompt:`;
-const dalleVersion = `DALL-E (${DALLE_VERSION})`;
-const dalleLogPrefix = `${dalleVersion} Prompt:`;
+const llmFramework = `LLM (${LLM_FRAMEWORK})`;
+const llmLogPrefix = `${llmFramework} query:`;
+const languageModel = `ChatGPT (${LANGUAGE_MODEL})`;
+const gptLogPrefix = `${languageModel} Prompt:`;
+const imageModel = `DALL-E (${IMAGE_MODEL})`;
+const dalleLogPrefix = `${imageModel} Prompt:`;
 const waiting = `Waiting ${DELAY / 1000} seconds...`;
 const placeholder = `What would you like to ask ${ARTHAS_NAME}? `;
 
@@ -72,11 +72,11 @@ export {
   BYE,
   EXIT,
   DALLE_ERROR,
-  llmVersion,
+  llmFramework,
   llmLogPrefix,
-  gptVersion,
+  languageModel,
   gptLogPrefix,
-  dalleVersion,
+  imageModel,
   dalleLogPrefix,
   waiting,
   placeholder,

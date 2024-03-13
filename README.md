@@ -74,9 +74,9 @@ Set up the environment.
 
 ```
 OPENAI_API_KEY=
-LLM_VERSION=llamaindex
-GPT_VERSION=GPT-3.5
-DALLE_VERSION=dall-e-2
+LLM_FRAMEWORK=llamaindex
+LANGUAGE_MODEL=GPT-3.5
+IMAGE_MODEL=dall-e-2
 DELAY=2000
 VERBOSE=false
 GREETING=false
@@ -92,13 +92,13 @@ STORAGE_URI=./.tmp
 
 Your OpenAI API key.
 
-`GPT_VERSION`
+`LANGUAGE_MODEL`
 
-ChatGPT version (example: `GPT-3.5`).
+Example: `GPT-3.5`.
 
-`DALLE_VERSION`
+`IMAGE_MODEL`
 
-DALL-E version (example: `dall-e-2`).
+Example: `dall-e-2`.
 
 `DELAY`
 
