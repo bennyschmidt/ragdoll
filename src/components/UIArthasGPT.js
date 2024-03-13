@@ -22,12 +22,18 @@ import {
 
 import {
   LOADED_CACHED_QUESTION,
+  CREATING_AGENT,
+  GOODBYE,
+  BYE,
+  EXIT,
   gptVersion,
   gptLogPrefix,
   waiting,
   placeholder,
   povPromptPrefix
 } from '../utils/strings.js';
+
+// Persona configs
 
 import { KNOWLEDGE_URI } from '../utils/persona.js';
 
@@ -46,7 +52,9 @@ const { DELAY } = process.env;
  *                                     *
  * * * * * * * * * * * * * * * * * * * */
 
-const UIArthasGPT = async (greeting = false) => {
+let agent;
+
+const UIArthasGPT = async greeting => {
   const ui = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -55,7 +63,11 @@ const UIArthasGPT = async (greeting = false) => {
   // Greeting
 
   if (greeting) {
-    await ArthasGPT(
+    if (isVerbose) {
+      log(CREATING_AGENT);
+    }
+
+    agent = await ArthasGPT(
       KNOWLEDGE_URI,
       greeting,
       isCacheEnabled
@@ -64,7 +76,14 @@ const UIArthasGPT = async (greeting = false) => {
 
   // Prompt user
 
-  ui.question(placeholder, async input => {
+  const promptUser = async input => {
+    const inputLowerCase = input.toLowerCase();
+
+    if (inputLowerCase === BYE || inputLowerCase === EXIT) {
+      log(GOODBYE);
+      process.exit();
+    }
+
     const chatAgent = new OpenAIAgent({});
 
     // Create prompt transforming the user input into the third-person
@@ -101,15 +120,24 @@ const UIArthasGPT = async (greeting = false) => {
       await delay(DELAY);
     }
 
-    await ArthasGPT(
-      KNOWLEDGE_URI,
-      messageResponse,
-      true
-    );
+    if (agent) {
+      await agent.chat(messageResponse);
+    } else {
+      if (isVerbose) {
+        log(CREATING_AGENT);
+      }
 
-    ui.close();
-    UIArthasGPT();
-  });
+      agent = await ArthasGPT(
+        KNOWLEDGE_URI,
+        messageResponse,
+        true
+      );
+    }
+
+    ui.question(placeholder, promptUser);
+  };
+
+  ui.question(placeholder, promptUser);
 };
 
 export {
