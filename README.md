@@ -1,6 +1,6 @@
 # ArthasGPT
 
-![arthas-leonardo-ai](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/6b93b041-f30f-4121-a951-a746a19c75fc)
+![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
 
 -----
 
@@ -17,8 +17,8 @@ _In native Terminal with no addons:_
 > Question: "what town are you from"
 >
 > Answer:
->
-> ![Screenshot from 2024-03-12 09-11-48](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/4cc0aa1c-1592-425c-9ed3-59a5605d705b)
+> 
+> ![312186339-4cc0aa1c-1592-425c-9ed3-59a5605d705b](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/89a4858b-2b70-4ab1-bfca-92da2039d20b)
 
 _With high-res image support:_
 
@@ -26,15 +26,15 @@ _With high-res image support:_
 >
 > Answer:
 >
-> ![sylvanas](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/a3c7634b-94d5-4d12-9dd6-3d748670f2d3)
+> ![312185744-a3c7634b-94d5-4d12-9dd6-3d748670f2d3](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/4f723771-e0c3-4825-a8ea-674a7dbbff4c)
 
 _In verbose mode with caching:_
 
 > Question: "why are you so mean"
 >
 > Answer:
->
->  ![arthas](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/97a1dbc1-0669-4f43-8067-34cc99938449)
+> 
+> ![312192889-97a1dbc1-0669-4f43-8067-34cc99938449](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/eb226377-f63b-40b0-b258-d00a12af46c8)
 
 _In verbose mode when he doesn't know the answer based on the knowledge he has:_
 
@@ -42,7 +42,7 @@ _In verbose mode when he doesn't know the answer based on the knowledge he has:_
 >
 > Answer:
 >
-> https://github.com/bennyschmidt/ArthasGPT/assets/45407493/edf28900-d223-4315-8c6e-a7d150b4add9
+> https://github.com/bennyschmidt/ArthasGPT/assets/45407493/16ac6fe8-686e-4d57-b949-2f0dad05dbe4
 
 Note that LLM query could not find any relevant info, resulting in this prompt fragment:
 
@@ -54,7 +54,7 @@ Yet the GPT-3.5 prompt is still robust enough to provide a meaningful response i
 
 And we still get a relevant image:
 
-> ![image](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/f0304218-366f-43a9-8208-77543e486781)
+> ![312196072-f0304218-366f-43a9-8208-77543e486781](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/6b348768-4f6a-4505-a360-d74e2c4f0154)
 
 -----
 
