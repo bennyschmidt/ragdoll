@@ -20,7 +20,7 @@ WRITING_TONE=careless
 
 > Answer:
 >
-> ![cloud](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/ec10906b-32da-4dd8-b6f6-62e5b1f3aa82)
+> ![312217025-ec10906b-32da-4dd8-b6f6-62e5b1f3aa82](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/68103d7f-2ea2-4efa-86ba-cd29a223c17f)
 
 -----
 
@@ -73,8 +73,8 @@ WRITING_TONE=hilarious
 > Answer: "Whenever I'm feeling down, I just picture the Wachati Princess strutting her stuff, and it instantly brings a smile to my face. She's like a walking comedy show, with her hilarious antics and diva demands. I bet she even has her own reality TV show, "Keeping Up with the Wachati Princess." 📺😂
 >
 > So, yeah, forget about lions, tigers, and bears. The Wachati Princess is where it's at! She's the epitome of fabulousness and the ultimate source of laughter. Long live the Wachati Princess, my one and only animal obsession! 🙌🎉".
->
-> ![image](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/c0331bae-69eb-444d-8ac9-d0eca3d0d07a)
+> 
+> ![312221324-c0331bae-69eb-444d-8ac9-d0eca3d0d07a](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/526593e1-be75-4e2a-ad03-a43f7c26316f)
 
 (I asked for _an animal_, which Ace acknowledged, but it's still a potentially bad answer. It also looks like a blend of Ace and the princess)
 
@@ -131,7 +131,7 @@ WRITING_STYLE=enthusiastic, from the year 1700 A.D.
 WRITING_TONE=heroic
 ```
 
-![link](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/7b76d3e9-4c58-49fe-a906-73c030c8111a)
+![312257173-7b76d3e9-4c58-49fe-a906-73c030c8111a](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/3fd8817b-15e9-4633-ae8c-c31ba4f99ba7)
 
 _Link in the Dark World, standing in front of Ganon's pyramid, holding a swor.. hilt... and missing some body parts, but you get the idea. Like the Ace Ventura example, I see elements of Ganon mixed in with Link, perhaps due to prompt constraints._
 
@@ -139,10 +139,10 @@ _Link in the Dark World, standing in front of Ganon's pyramid, holding a swor.. 
 
 In this example, we're [running middleware](https://github.com/bennyschmidt/ArthasGPT/blob/master/README.md#middleware) at the 2nd stage, diverting the prompt to Leonardo.Ai's ultra fine-tuned model Leonardo Kino XL, instead of the more generic DALL-E 2.
 
-![ganons_vile_quest_for_trifoce_was_links_grandest_trial_3](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/f4d6068c-c906-4fcd-befa-050aff326d23)
-![ganons_vile_quest_for_trifoce_was_links_grandest_trial_2](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/33b8b572-1041-4d2b-aeb7-6582583e1e9b)
-![ganons_vile_quest_for_trifoce_was_links_grandest_trial_0](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/f826731f-0a1f-4e9d-807f-d4c2f754cbc4)
-![ganons_vile_quest_for_trifoce_was_links_grandest_trial_1](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/2071aec6-71c6-4dc5-a08c-1ae7a23cdd75)
+![312284048-f4d6068c-c906-4fcd-befa-050aff326d23](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/5ae4f580-e896-43a8-bc73-4a8854c978cc)
+![312284047-33b8b572-1041-4d2b-aeb7-6582583e1e9b](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/d3cd2215-2e91-4429-a349-6da841ce93d6)
+![312284042-f826731f-0a1f-4e9d-807f-d4c2f754cbc4](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/980ce6ae-a39b-46c8-8d9f-99cf0fd2cb57)
+![312284040-2071aec6-71c6-4dc5-a08c-1ae7a23cdd75](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/b7bc3813-5b2a-4167-a8c1-93e653366a62)
 
 Much better! Fine-tuned models will usually outperform generic ones if you have a specific aesthetic in mind.
 
@@ -156,17 +156,17 @@ WRITING_STYLE=a shopkeeper from Final Fantasy 14
 WRITING_TONE=good customer service
 ```
 
-![vendor](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/68034b21-280c-4aac-a066-7d3210795238)
+![312259848-68034b21-280c-4aac-a066-7d3210795238](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/1b13efbd-39fb-4f31-8def-32df70b767d3)
 
 _Presumably the signage outside the alehouse, or maybe the label on the Buffalo Milk written in a strange Eorzean dialect._
 
 #### Fact checking the NPC
 
-![ff14](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/e70c6549-9535-4084-84cd-2238eca3c5f5)
+![312257224-e70c6549-9535-4084-84cd-2238eca3c5f5](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/cbfa6822-c3d6-4398-a7ff-f5e15ba32edd)
 
 _Indeed, the Buffalo Milk costs 4 gil. Keep in mind there are dozens if not hundreds of currencies in Final Fantasy, and nowhere in the knowledge source is the word "gil" ever written, but it is the `alt` attribute of the icon next to the number. Let's see how Google does:_
 
-![google](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/36d8f336-993a-4b85-8ec2-25f85e82ca14)
+![312257245-36d8f336-993a-4b85-8ec2-25f85e82ca14](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/ce91da99-f6fc-4b55-9d45-f83a69ca37d5)
 
 _Google correctly bolds "Buffalo Milk", but incorrectly bolds the wrong price of "3 gil". It's clear that the "1 gil" next to the word "Buffalo Milk" belongs to another item, but unfortunate that Google couldn't truncate that one, and actually show "4 gil" here. In any case, this was the 2nd search result, the 1st one being entirely unrelated._
 
