@@ -1,5 +1,12 @@
 import dotenv from 'dotenv';
 
+import {
+  ARTHAS_NAME,
+  ART_STYLE,
+  WRITING_STYLE,
+  WRITING_TONE
+} from './persona.js';
+
 dotenv.config();
 
 const {
@@ -7,12 +14,22 @@ const {
   GPT_VERSION,
   DALLE_VERSION,
   DELAY,
-  GREETING,
-  ARTHAS_NAME,
-  ART_STYLE,
-  WRITING_STYLE,
-  WRITING_TONE
+  GREETING
 } = process.env;
+
+const LOADED_CACHED_QUESTION = `User question loaded from cache.`;
+const LOADED_CACHED_QUERY = `LLM query loaded from cache.`;
+const LOADED_CACHED_GPT_RESPONSE = `ChatGPT response loaded from cache.`;
+const LOADED_CACHED_DALLE_RESPONSE = `DALL-E response loaded from cache.`;
+const LOADED_CACHED_KNOWLEDGE = `Knowledge loaded from cache.`;
+const CACHE_CLEARED = `Cache cleared.`;
+const PREPARING_RESPONSE = `Preparing response...`;
+const PREPARING_DISPLAY = `Preparing response for display...`;
+const CREATING_VECTOR_STORE = `Creating vector store...`;
+const CREATING_QUERY_ENGINE = `Creating query engine...`;
+const STARTING = `Initializing...`;
+const DONE = `Done.`;
+const DEFAULT_ANSWER = `Unknown answer.`;
 
 const llmVersion = `LLM (${LLM_VERSION})`;
 const llmLogPrefix = `${llmVersion} query:`;
@@ -28,6 +45,19 @@ const arthasPromptPrefix = `Re-write the following message in the first-person, 
 const arthasGreeting = GREETING === 'false' ? false : GREETING;
 
 export {
+  LOADED_CACHED_QUESTION,
+  LOADED_CACHED_QUERY,
+  LOADED_CACHED_GPT_RESPONSE,
+  LOADED_CACHED_DALLE_RESPONSE,
+  LOADED_CACHED_KNOWLEDGE,
+  CACHE_CLEARED,
+  PREPARING_RESPONSE,
+  PREPARING_DISPLAY,
+  CREATING_VECTOR_STORE,
+  CREATING_QUERY_ENGINE,
+  STARTING,
+  DONE,
+  DEFAULT_ANSWER,
   llmVersion,
   llmLogPrefix,
   gptVersion,

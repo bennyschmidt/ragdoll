@@ -17,7 +17,7 @@ _In native Terminal with no addons:_
 > Question: "what town are you from"
 >
 > Answer:
-> 
+>
 > ![312186339-4cc0aa1c-1592-425c-9ed3-59a5605d705b](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/89a4858b-2b70-4ab1-bfca-92da2039d20b)
 
 _With high-res image support:_
@@ -33,7 +33,7 @@ _In verbose mode with caching:_
 > Question: "why are you so mean"
 >
 > Answer:
-> 
+>
 > ![312192889-97a1dbc1-0669-4f43-8067-34cc99938449](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/eb226377-f63b-40b0-b258-d00a12af46c8)
 
 _In verbose mode when he doesn't know the answer based on the knowledge he has:_
@@ -64,19 +64,11 @@ Want to go beyond Arthas? You can create a custom persona for just about anyone 
 
 See [personas.md](./personas.md).
 
-## Middleware
-
-To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
-  1. LLM query: Run the formatted prompt through another transformer (instead of ChatGPT)
-  2. Transformed response: Run the final image prompt through a different image model (instead of DALL-E)
-     
-_Instructions coming soon._
-
 -----
 
 ## Usage
 
-Options are surfaced to the `.env` for ease of configuration per environment.
+Set up the environment.
 
 #### .env scaffold
 
@@ -91,31 +83,10 @@ GREETING=false
 CACHE=true
 MAX_STORAGE_KEY_LENGTH=32
 LOG_PREFIX=<ArthasGPT>
-ARTHAS_NAME=Arthas
-KNOWLEDGE_URI=https://wowpedia.fandom.com/wiki/Arthas_Menethil
 STORAGE_URI=./.tmp
-IMAGE_SIZE=1024
-IMAGE_QUALITY=standard
-ART_STYLE=Blizzard's World of Warcraft concept art
-WRITING_STYLE=inspiring but grim, from the year 1200 A.D.
-WRITING_TONE=slightly annoyed
-LOADED_CACHED_QUESTION=User question loaded from cache.
-LOADED_CACHED_QUERY=LLM query loaded from cache.
-LOADED_CACHED_GPT_RESPONSE=ChatGPT response loaded from cache.
-LOADED_CACHED_DALLE_RESPONSE=DALL-E response loaded from cache.
-LOADED_CACHED_KNOWLEDGE=Knowledge loaded from cache.
-CACHE_CLEARED=Cache cleared.
-PREPARING_RESPONSE=Preparing response...
-PREPARING_DISPLAY=Preparing response for display...
-CREATING_VECTOR_STORE=Creating vector store...
-CREATING_QUERY_ENGINE=Creating query engine...
-STARTING=Initializing...
-DONE=Done.
-DEFAULT_ANSWER=Unknown answer.
-
 ```
 
-#### Important configurations
+#### Important environment variables
 
 `OPENAI_API_KEY`
 
@@ -157,34 +128,33 @@ The transformed input/prompt is what's cached, not the literal user input. For e
 
 How long storage keys can be. The keys are derived from queries/prompts, but there are key/value limits in `localStorage` and some prompts can be very long. An alternative to this config would be to make the developer provide a `key` (similar to React) each time `remember` is called, but that isn't supported right now.
 
-`ARTHAS_NAME`
-
-The name of the persona you're designing.
-
-`KNOWLEDGE_URI`
-
-The URL to the knowledgebase about the persona (example: a Wiki link).
-
 `STORAGE_URI`
 
 Path to a temp folder used for cache (default is `./.tmp`).
 
-`IMAGE_SIZE`
+#### Persona configuration
 
-Note that [DALL-E 2](https://openai.com/dall-e-2) has specific size requirements.
+```
+ARTHAS_NAME=Arthas
+KNOWLEDGE_URI=https://wowpedia.fandom.com/wiki/Arthas_Menethil
+ART_STYLE=Blizzard's World of Warcraft concept art
+WRITING_STYLE=inspiring but grim, from the year 1200 A.D.
+WRITING_TONE=slightly annoyed
 
-`ART_STYLE`
+```
 
-A prompt fragment to define the art style of images.
-
-`WRITING_STYLE`
-
-A prompt fragment to define the writing style of text.
-
-`WRITING_TONE`
-
-A prompt fragment to further refine text output.
+Changing these values will result in a [new persona](#custom-personas). See [`/src/utils/persona.js`](./src/utils/persona.js).
 
 #### Run
 
 `npm start`
+
+## Middleware
+
+To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
+  1. LLM query: Run the formatted prompt through another transformer (instead of ChatGPT)
+  2. Transformed response: Run the final image prompt through a different image model (instead of DALL-E)
+
+_Instructions coming soon._
+
+See this [Leonardo.Ai demo](./personas.md#bonus-integrating-with-leonardo-sdk-to-get-amazing-images).

@@ -21,6 +21,7 @@ import {
 // Human-readable strings
 
 import {
+  LOADED_CACHED_QUESTION,
   gptVersion,
   gptLogPrefix,
   waiting,
@@ -28,15 +29,13 @@ import {
   povPromptPrefix
 } from '../utils/strings.js';
 
+import { KNOWLEDGE_URI } from '../utils/persona.js';
+
 import { ArthasGPT } from './ArthasGPT.js';
 
 dotenv.config();
 
-const {
-  DELAY,
-  KNOWLEDGE_URI,
-  LOADED_CACHED_QUESTION
-} = process.env;
+const { DELAY } = process.env;
 
 /* * * * * * * * * * * * * * * * * * * *
  *                                     *
@@ -108,6 +107,7 @@ const UIArthasGPT = async (greeting = false) => {
       true
     );
 
+    ui.close();
     UIArthasGPT();
   });
 };

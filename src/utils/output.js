@@ -7,6 +7,12 @@ const {
   LOG_PREFIX
 } = process.env;
 
+// Note that DALL-E 2 has specific size requirements.
+// Learn more at https://openai.com/dall-e-2
+
+const IMAGE_SIZE = 1024;
+const IMAGE_QUALITY = 'standard';
+
 let isVerbose = VERBOSE === 'false' ? false : VERBOSE;
 
 /* * * * * * * * * * * * * * * * * * * *
@@ -37,6 +43,8 @@ const log = text => console.log(`${LOG_PREFIX} ${text}`);
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export {
+  IMAGE_SIZE,
+  IMAGE_QUALITY,
   isVerbose,
   log,
   delay

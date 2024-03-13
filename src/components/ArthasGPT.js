@@ -28,24 +28,6 @@ import {
 // Human-readable strings
 
 import {
-  llmLogPrefix,
-  gptVersion,
-  gptLogPrefix,
-  dalleLogPrefix,
-  waiting,
-  imagePromptPrefix,
-  arthasPromptPrefix,
-  arthasGreeting
-} from '../utils/strings.js';
-
-dotenv.config();
-
-const {
-  DALLE_VERSION,
-  DELAY,
-  KNOWLEDGE_URI,
-  IMAGE_SIZE,
-  IMAGE_QUALITY,
   LOADED_CACHED_QUERY,
   LOADED_CACHED_GPT_RESPONSE,
   LOADED_CACHED_DALLE_RESPONSE,
@@ -57,7 +39,29 @@ const {
   CREATING_QUERY_ENGINE,
   STARTING,
   DONE,
-  DEFAULT_ANSWER
+  DEFAULT_ANSWER,
+  llmLogPrefix,
+  gptVersion,
+  gptLogPrefix,
+  dalleLogPrefix,
+  waiting,
+  imagePromptPrefix,
+  arthasPromptPrefix,
+  arthasGreeting
+} from '../utils/strings.js';
+
+import { KNOWLEDGE_URI } from '../utils/persona.js';
+
+import {
+  IMAGE_SIZE,
+  IMAGE_QUALITY
+} from '../utils/output.js';
+
+dotenv.config();
+
+const {
+  DALLE_VERSION,
+  DELAY
 } = process.env;
 
 /* * * * * * * * * * * * * * * * * * * *
@@ -93,6 +97,45 @@ const ArthasGPT = async (
 
  /* * * * * * * * * * * * * * * * * * * *
   *                                     *
+  * createIndex                         *
+  *                                     *
+  * Create a document from fetched      *
+  * text data and add an indexed        *
+  * store for library access.           *
+  *                                     *
+  * text: string                        *
+  *                                     *
+  * * * * * * * * * * * * * * * * * * * */
+
+  let queryEngine;
+
+  const createIndex = async text => {
+    // Create index and query engine
+
+    const document = new Document({ text });
+
+    if (isVerbose) {
+      log(CREATING_VECTOR_STORE);
+    }
+
+    const index = await VectorStoreIndex.fromDocuments([document]);
+
+    if (isVerbose) {
+      log(DONE);
+      log(waiting);
+    }
+
+    await delay(DELAY);
+
+    if (isVerbose) {
+      log(CREATING_QUERY_ENGINE);
+    }
+
+    queryEngine = index.asQueryEngine();
+  };
+
+ /* * * * * * * * * * * * * * * * * * * *
+  *                                     *
   * respond                             *
   *                                     *
   * Lifecycle method called when        *
@@ -120,40 +163,7 @@ const ArthasGPT = async (
 
    /* * * * * * * * * * * * * * * * * * * *
     *                                     *
-    * 1. Index knowledge                  *
-    *                                     *
-    * Create a document from fetched      *
-    * text data and add an indexed        *
-    * store for library access.           *
-    *                                     *
-    * * * * * * * * * * * * * * * * * * * */
-
-    // Create index and query engine
-
-    const document = new Document({ text });
-
-    if (isVerbose) {
-      log(CREATING_VECTOR_STORE);
-    }
-
-    const index = await VectorStoreIndex.fromDocuments([document]);
-
-    if (isVerbose) {
-      log(DONE);
-      log(waiting);
-    }
-
-    await delay(DELAY);
-
-    if (isVerbose) {
-      log(CREATING_QUERY_ENGINE);
-    }
-
-    const queryEngine = index.asQueryEngine();
-
-   /* * * * * * * * * * * * * * * * * * * *
-    *                                     *
-    * 2. Create query                     *
+    * createQuery                         *
     *                                     *
     * Run and cache the user's query      *
     * to get the core of the prompt.      *
@@ -162,36 +172,38 @@ const ArthasGPT = async (
 
     let queryResponse;
 
-    const queryCache = recall(query);
+    const createQuery = async () => {
+      const queryCache = recall(query);
 
-    if (queryCache) {
-      if (isVerbose) {
-        log(LOADED_CACHED_QUERY);
+      if (queryCache) {
+        if (isVerbose) {
+          log(LOADED_CACHED_QUERY);
+        }
+
+        queryResponse = queryCache;
+      } else {
+        if (isVerbose) {
+          log(`${llmLogPrefix} ${query}`);
+        }
+
+        queryResponse = await queryEngine.query({
+          query
+        });
+
+        remember(query, queryResponse);
       }
 
-      queryResponse = queryCache;
-    } else {
       if (isVerbose) {
-        log(`${llmLogPrefix} ${query}`);
+        log(DONE);
+        log(waiting);
       }
 
-      queryResponse = await queryEngine.query({
-        query
-      });
-
-      remember(query, queryResponse);
-    }
-
-    if (isVerbose) {
-      log(DONE);
-      log(waiting);
-    }
-
-    await delay(DELAY);
+      await delay(DELAY);
+    };
 
    /* * * * * * * * * * * * * * * * * * * *
     *                                     *
-    * 3. Invoke chat agent                *
+    * invokeChatAgent                     *
     *                                     *
     * Complete the prompt by decorating   *
     * it in the defined style and send to *
@@ -199,48 +211,52 @@ const ArthasGPT = async (
     *                                     *
     * * * * * * * * * * * * * * * * * * * */
 
-    const chatAgent = new OpenAIAgent({});
-
-    const queryString = queryResponse.toString();
-
-    // Create prompt to answer in the defined style
-
-    let message = `${arthasPromptPrefix} ${queryString}`;
-
+    let message;
     let messageResponse;
+    let queryString;
 
-    const messageCache = recall(queryString);
+    const invokeChatAgent = async () => {
+      const chatAgent = new OpenAIAgent({});
 
-    if (messageCache) {
-      if (isVerbose) {
-        log(LOADED_CACHED_GPT_RESPONSE);
+      queryString = queryResponse.toString();
+
+      // Create prompt to answer in the defined style
+
+      message = `${arthasPromptPrefix} ${queryString}`;
+
+      const messageCache = recall(queryString);
+
+      if (messageCache) {
+        if (isVerbose) {
+          log(LOADED_CACHED_GPT_RESPONSE);
+        }
+
+        messageResponse = messageCache;
+      } else {
+        if (isVerbose) {
+          log(`${gptLogPrefix} ${message}`);
+        }
+
+        const { response: gptResponse } = await chatAgent.chat({
+          message
+        });
+
+        messageResponse = gptResponse;
+
+        remember(queryString, messageResponse);
+
+        if (isVerbose) {
+          log(`${gptVersion} responded with "${gptResponse}".`);
+          log(waiting);
+        }
+
+        await delay(DELAY);
       }
-
-      messageResponse = messageCache;
-    } else {
-      if (isVerbose) {
-        log(`${gptLogPrefix} ${message}`);
-      }
-
-      const { response: gptResponse } = await chatAgent.chat({
-        message
-      });
-
-      messageResponse = gptResponse;
-
-      remember(queryString, messageResponse);
-
-      if (isVerbose) {
-        log(`${gptVersion} responded with "${gptResponse}".`);
-        log(waiting);
-      }
-
-      await delay(DELAY);
-    }
+    };
 
    /* * * * * * * * * * * * * * * * * * * *
     *                                     *
-    * 4. Invoke image agent               *
+    * invokeImageAgent                    *
     *                                     *
     * With the ChatGPT response now in    *
     * first-person from the persona, send *
@@ -249,69 +265,83 @@ const ArthasGPT = async (
     *                                     *
     * * * * * * * * * * * * * * * * * * * */
 
-    const imageAgent = new OpenAI();
-
     // Create prompt to render an image in the defined style
 
     let imgResponse;
 
-    const imgCache = recall(messageResponse);
+    const invokeImageAgent = async () => {
+      const imageAgent = new OpenAI();
 
-    if (imgCache) {
-      if (isVerbose) {
-        log(LOADED_CACHED_DALLE_RESPONSE);
+      const imgCache = recall(messageResponse);
+
+      if (imgCache) {
+        if (isVerbose) {
+          log(LOADED_CACHED_DALLE_RESPONSE);
+        }
+
+        imgResponse = imgCache;
+      } else {
+        if (isVerbose) {
+          log(`${dalleLogPrefix} ${message}`);
+        }
+
+        const dalleResponse = await imageAgent.images.generate({
+          model: DALLE_VERSION,
+          prompt: `${imagePromptPrefix} ${messageResponse}`,
+          size: `${IMAGE_SIZE}x${IMAGE_SIZE}`,
+          quality: IMAGE_QUALITY,
+          n: 1
+        });
+
+        imgResponse = dalleResponse.data[0].url;
+
+        remember(messageResponse, imgResponse);
+
+        if (isVerbose) {
+          log(`${dalleLogPrefix} responded with "${imgResponse}".`);
+        }
       }
-
-      imgResponse = imgCache;
-    } else {
-      if (isVerbose) {
-        log(`${dalleLogPrefix} ${message}`);
-      }
-
-      const dalleResponse = await imageAgent.images.generate({
-        model: DALLE_VERSION,
-        prompt: `${imagePromptPrefix} ${messageResponse}`,
-        size: `${IMAGE_SIZE}x${IMAGE_SIZE}`,
-        quality: IMAGE_QUALITY,
-        n: 1
-      });
-
-      imgResponse = dalleResponse.data[0].url;
-
-      remember(messageResponse, imgResponse);
-
-      if (isVerbose) {
-        log(`${dalleLogPrefix} responded with "${imgResponse}".`);
-      }
-    }
+    };
 
    /* * * * * * * * * * * * * * * * * * * *
     *                                     *
-    * 5. Output                           *
+    * render                              *
     *                                     *
     * Return a "Persona Reply" of         *
     * { image, text } for display.        *
     *                                     *
     * * * * * * * * * * * * * * * * * * * */
 
-    if (isVerbose) {
-      log(PREPARING_DISPLAY);
-    }
+    const render = async () => {
+      if (isVerbose) {
+        log(PREPARING_DISPLAY);
+      }
 
-    const image = await fetch(imgResponse);
+      const image = await fetch(imgResponse);
 
-    const buffer = Buffer.from(await image.arrayBuffer());
+      const buffer = Buffer.from(await image.arrayBuffer());
 
-    const displayImage = await terminalImage.buffer(buffer);
+      const displayImage = await terminalImage.buffer(buffer);
 
-    if (isVerbose) {
-      log(DONE);
-    }
+      if (isVerbose) {
+        log(DONE);
+      }
 
-    return {
-      image: displayImage,
-      text: messageResponse
+      return {
+        image: displayImage,
+        text: messageResponse
+      };
     };
+
+    // Create and render the response
+
+    await createQuery();
+
+    await invokeChatAgent();
+
+    await invokeImageAgent();
+
+    return render();
   };
 
  /* * * * * * * * * * * * * * * * * * * *
@@ -338,6 +368,8 @@ const ArthasGPT = async (
     }
 
     if (knowledgeCache) {
+      await createIndex(knowledgeCache);
+
       if (isVerbose) {
         log(LOADED_CACHED_KNOWLEDGE);
       }
@@ -345,6 +377,8 @@ const ArthasGPT = async (
       answer = await respond(false, knowledgeCache);
     } else {
       textract.fromUrl(knowledgeURI, async (error, text) => {
+        await createIndex(text);
+
         answer = await respond(error, text);
       });
     }
