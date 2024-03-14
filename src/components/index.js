@@ -1,7 +1,7 @@
 const { ArthasGPT } = require('./ArthasGPT');
-const { UIArthasGPT } = require('./UIArthasGPT');
+const { ArthasGPTCommandLine } = require('./ArthasGPTCommandLine');
 
 module.exports = {
   ArthasGPT,
-  UIArthasGPT
+  ArthasGPTCommandLine
 };

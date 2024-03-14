@@ -45,7 +45,7 @@ const { DELAY } = process.env;
 
 /* * * * * * * * * * * * * * * * * * * *
  *                                     *
- * UIArthasGPT                         *
+ * ArthasGPTCommandLine                         *
  *                                     *
  * Interface layer (based on readline) *
  * for ArthasGPT.                      *
@@ -54,7 +54,7 @@ const { DELAY } = process.env;
 
 let agent;
 
-const UIArthasGPT = async greeting => {
+const ArthasGPTCommandLine = async greeting => {
   const ui = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -141,5 +141,5 @@ const UIArthasGPT = async greeting => {
 };
 
 module.exports = {
-  UIArthasGPT
+  ArthasGPTCommandLine
 };

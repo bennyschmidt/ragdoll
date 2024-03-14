@@ -1,5 +1,6 @@
-const { ArthasGPT } = require('./components/ArthasGPT.js');
+// Run the CLI
 
-module.exports = {
-  ArthasGPT
-};
+const { arthasGreeting } = require('./utils/strings');
+const { ArthasGPTCommandLine } = require('./components/ArthasGPTCommandLine');
+
+ArthasGPTCommandLine(arthasGreeting);

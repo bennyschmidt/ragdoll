@@ -1,6 +1,7 @@
-const { arthasGreeting } = require('./src/utils/strings');
-const { UIArthasGPT } = require('./src/components/UIArthasGPT');
+// Library export
 
-// Run the UI
+const { ArthasGPT } = require('./components/ArthasGPT.js');
 
-UIArthasGPT(arthasGreeting);
+module.exports = {
+  default: ArthasGPT
+};
