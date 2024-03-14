@@ -158,3 +158,7 @@ To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
 _Instructions coming soon._
 
 See this [Leonardo.Ai demo](./personas.md#bonus-integrating-with-leonardo-sdk-to-get-amazing-images).
+
+## Web app
+
+You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
