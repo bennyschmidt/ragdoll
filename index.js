@@ -1,5 +1,5 @@
 // Library export
 
-const { ArthasGPT } = require('./components/ArthasGPT.js');
+const { ArthasGPT } = require('./src/components/ArthasGPT.js');
 
 module.exports = ArthasGPT;
