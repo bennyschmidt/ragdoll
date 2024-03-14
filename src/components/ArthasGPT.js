@@ -83,7 +83,7 @@ const ArthasGPT = async (
   query = arthasGreeting,
   cache = true
 ) => {
-  const terminalImage = await import('terminal-image');
+  const { default: terminalImage } = await import('terminal-image');
 
   let queryResponse;
 
