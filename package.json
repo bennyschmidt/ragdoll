@@ -1,6 +1,6 @@
 {
   "name": "arthasgpt",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "src/index.js",
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -10,7 +10,7 @@
     "textract": "^2.5.0"
   },
   "scripts": {
-    "start": "node src/index",
+    "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

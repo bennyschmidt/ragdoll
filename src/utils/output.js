@@ -4,6 +4,7 @@ dotenv.config();
 
 const {
   VERBOSE,
+  RENDER,
   LOG_PREFIX
 } = process.env;
 
@@ -13,7 +14,8 @@ const {
 const IMAGE_SIZE = 1024;
 const IMAGE_QUALITY = 'standard';
 
-let isVerbose = VERBOSE === 'false' ? false : VERBOSE;
+const isVerbose = VERBOSE === 'false' ? false : VERBOSE;
+const isRendered = RENDER === 'true';
 
 /* * * * * * * * * * * * * * * * * * * *
  *                                     *
@@ -45,6 +47,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 module.exports = {
   IMAGE_SIZE,
   IMAGE_QUALITY,
+  isRendered,
   isVerbose,
   log,
   delay
