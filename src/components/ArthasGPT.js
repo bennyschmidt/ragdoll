@@ -22,6 +22,7 @@ const {
 const {
   IMAGE_SIZE,
   IMAGE_QUALITY,
+  isRendered,
   isVerbose,
   log,
   delay
@@ -383,6 +384,13 @@ const ArthasGPT = async (
 
     if (isVerbose) {
       log(DONE);
+    }
+
+    if (!isRendered) {
+      return {
+        imageURL: imgResponse,
+        text: messageResponse
+      };
     }
 
     // Display the image
