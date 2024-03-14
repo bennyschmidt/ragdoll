@@ -1,26 +1,26 @@
-import dotenv from 'dotenv';
-import readline from 'readline';
-import { OpenAIAgent } from 'llamaindex';
+const dotenv = require('dotenv');
+const readline = require('readline');
+const { OpenAIAgent } = require('llamaindex');
 
 // Storage utils
 
-import {
+const {
   isCacheEnabled,
   remember,
   recall
-} from '../utils/storage.js';
+} = require('../utils/storage.js');
 
 // Output utils
 
-import {
+const {
   isVerbose,
   log,
   delay
-} from '../utils/output.js';
+} = require('../utils/output.js');
 
 // Human-readable strings
 
-import {
+const {
   LOADED_CACHED_QUESTION,
   CREATING_AGENT,
   GOODBYE,
@@ -31,13 +31,13 @@ import {
   waiting,
   placeholder,
   povPromptPrefix
-} from '../utils/strings.js';
+} = require('../utils/strings.js');
 
 // Persona configs
 
-import { KNOWLEDGE_URI } from '../utils/persona.js';
+const { KNOWLEDGE_URI } = require('../utils/persona.js');
 
-import { ArthasGPT } from './ArthasGPT.js';
+const { ArthasGPT } = require('./ArthasGPT.js');
 
 dotenv.config();
 
@@ -140,6 +140,6 @@ const UIArthasGPT = async greeting => {
   ui.question(placeholder, promptUser);
 };
 
-export {
+module.exports = {
   UIArthasGPT
 };

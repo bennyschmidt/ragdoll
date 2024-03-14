@@ -6,7 +6,7 @@ const ART_STYLE = `Blizzard's World of Warcraft concept art in high resolution l
 const WRITING_STYLE = 'inspiring but grim, from the year 1200 A.D.';
 const WRITING_TONE = 'slightly resentful';
 
-export {
+module.exports = {
   ARTHAS_NAME,
   KNOWLEDGE_URI,
   ART_STYLE,

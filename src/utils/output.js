@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -42,7 +42,7 @@ const log = text => console.log(`${LOG_PREFIX} ${text}`);
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-export {
+module.exports = {
   IMAGE_SIZE,
   IMAGE_QUALITY,
   isVerbose,

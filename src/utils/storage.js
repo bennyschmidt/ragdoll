@@ -1,6 +1,6 @@
-import { LocalStorage } from 'node-localstorage';
+const { LocalStorage } = require('node-localstorage');
 
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -62,7 +62,7 @@ const recall = key => (
   isCacheEnabled && localStorage.getItem(key.slice(0, MAX_STORAGE_KEY_LENGTH))
 );
 
-export {
+module.exports = {
   isCacheEnabled,
   remember,
   recall,

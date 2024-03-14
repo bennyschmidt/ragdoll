@@ -1,35 +1,35 @@
-import dotenv from 'dotenv';
-import textract from 'textract';
-import OpenAI from 'openai';
-import terminalImage from 'terminal-image';
 
-import {
+const dotenv = require('dotenv');
+const textract = require('textract');
+const OpenAI = require('openai');
+
+const {
   Document,
   VectorStoreIndex,
   OpenAIAgent
-} from 'llamaindex';
+} = require('llamaindex');
 
 // Storage utils
 
-import {
+const {
   remember,
   recall,
   forget
-} from '../utils/storage.js';
+} = require('../utils/storage.js');
 
 // Output utils
 
-import {
+const {
   IMAGE_SIZE,
   IMAGE_QUALITY,
   isVerbose,
   log,
   delay
-} from '../utils/output.js';
+} = require('../utils/output.js');
 
 // Human-readable strings
 
-import {
+const {
   LOADED_CACHED_QUERY,
   LOADED_CACHED_GPT_RESPONSE,
   LOADED_CACHED_DALLE_RESPONSE,
@@ -52,11 +52,11 @@ import {
   imagePromptPrefix,
   arthasPromptPrefix,
   arthasGreeting
-} from '../utils/strings.js';
+} = require('../utils/strings.js');
 
 // Persona configs
 
-import { KNOWLEDGE_URI } from '../utils/persona.js';
+const { KNOWLEDGE_URI } = require('../utils/persona.js');
 
 dotenv.config();
 
@@ -66,23 +66,25 @@ const {
 } = process.env;
 
 /* * * * * * * * * * * * * * * * * * * *
- *                                     *
- * ArthasGPT                           *
- *                                     *
- * Manages state of knowledge          *
- * and responses.                      *
- *                                     *
- * knowledgeURI?: string               *
- * query?: string                      *
- * cache?: boolean                     *
- *                                     *
- * * * * * * * * * * * * * * * * * * * */
+*                                     *
+* ArthasGPT                           *
+*                                     *
+* Manages state of knowledge          *
+* and responses.                      *
+*                                     *
+* knowledgeURI?: string               *
+* query?: string                      *
+* cache?: boolean                     *
+*                                     *
+* * * * * * * * * * * * * * * * * * * */
 
 const ArthasGPT = async (
   knowledgeURI = KNOWLEDGE_URI,
   query = arthasGreeting,
   cache = true
 ) => {
+  const terminalImage = await import('terminal-image');
+
   let queryResponse;
 
   // Clear cache
@@ -98,16 +100,16 @@ const ArthasGPT = async (
   }
 
   /* * * * * * * * * * * * * * * * * * * *
-   *                                     *
-   * createIndex                         *
-   *                                     *
-   * Create a document from fetched      *
-   * text data and add an indexed        *
-   * store for library access.           *
-   *                                     *
-   * text: string                        *
-   *                                     *
-   * * * * * * * * * * * * * * * * * * * */
+  *                                     *
+  * createIndex                         *
+  *                                     *
+  * Create a document from fetched      *
+  * text data and add an indexed        *
+  * store for library access.           *
+  *                                     *
+  * text: string                        *
+  *                                     *
+  * * * * * * * * * * * * * * * * * * * */
 
   let queryEngine;
 
@@ -137,13 +139,13 @@ const ArthasGPT = async (
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-   *                                     *
-   * createQuery                         *
-   *                                     *
-   * Run and cache the user's query      *
-   * to get the core of the prompt.      *
-   *                                     *
-   * * * * * * * * * * * * * * * * * * * */
+  *                                     *
+  * createQuery                         *
+  *                                     *
+  * Run and cache the user's query      *
+  * to get the core of the prompt.      *
+  *                                     *
+  * * * * * * * * * * * * * * * * * * * */
 
   const createQuery = async () => {
     const queryCache = recall(query);
@@ -175,14 +177,14 @@ const ArthasGPT = async (
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-   *                                     *
-   * invokeChatAgent                     *
-   *                                     *
-   * Complete the prompt by decorating   *
-   * it in the defined style and send to *
-   * ChatGPT.                            *
-   *                                     *
-   * * * * * * * * * * * * * * * * * * * */
+  *                                     *
+  * invokeChatAgent                     *
+  *                                     *
+  * Complete the prompt by decorating   *
+  * it in the defined style and send to *
+  * ChatGPT.                            *
+  *                                     *
+  * * * * * * * * * * * * * * * * * * * */
 
   let message;
   let messageResponse;
@@ -233,15 +235,15 @@ const ArthasGPT = async (
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-   *                                     *
-   * invokeImageAgent                    *
-   *                                     *
-   * With the ChatGPT response now in    *
-   * first-person from the persona, send *
-   * to DALL-E to get an image that      *
-   * corresponds with the text.          *
-   *                                     *
-   * * * * * * * * * * * * * * * * * * * */
+  *                                     *
+  * invokeImageAgent                    *
+  *                                     *
+  * With the ChatGPT response now in    *
+  * first-person from the persona, send *
+  * to DALL-E to get an image that      *
+  * corresponds with the text.          *
+  *                                     *
+  * * * * * * * * * * * * * * * * * * * */
 
   // Create prompt to render an image in the defined style
 
@@ -289,18 +291,18 @@ const ArthasGPT = async (
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-   *                                     *
-   * respond                             *
-   *                                     *
-   * Lifecycle method called when        *
-   * the agent has stored new data       *
-   * and should respond with text        *
-   * and an image.                       *
-   *                                     *
-   * error?: any                         *
-   * text: string                        *
-   *                                     *
-   * * * * * * * * * * * * * * * * * * * */
+  *                                     *
+  * respond                             *
+  *                                     *
+  * Lifecycle method called when        *
+  * the agent has stored new data       *
+  * and should respond with text        *
+  * and an image.                       *
+  *                                     *
+  * error?: any                         *
+  * text: string                        *
+  *                                     *
+  * * * * * * * * * * * * * * * * * * * */
 
   const respond = async (error, text) => {
     if (isVerbose) {
@@ -327,15 +329,15 @@ const ArthasGPT = async (
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-   *                                     *
-   * chat                                *
-   *                                     *
-   * Pass additional queries to an       *
-   * instantiated Arthas.                *
-   *                                     *
-   * input: string                       *
-   *                                     *
-   * * * * * * * * * * * * * * * * * * * */
+  *                                     *
+  * chat                                *
+  *                                     *
+  * Pass additional queries to an       *
+  * instantiated Arthas.                *
+  *                                     *
+  * input: string                       *
+  *                                     *
+  * * * * * * * * * * * * * * * * * * * */
 
   const chat = async input => {
     const knowledgeCache = recall(knowledgeURI);
@@ -350,13 +352,13 @@ const ArthasGPT = async (
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-   *                                     *
-   * render                              *
-   *                                     *
-   * Return a "Persona Reply" of         *
-   * { image, text } for display.        *
-   *                                     *
-   * * * * * * * * * * * * * * * * * * * */
+  *                                     *
+  * render                              *
+  *                                     *
+  * Return a "Persona Reply" of         *
+  * { image, text } for display.        *
+  *                                     *
+  * * * * * * * * * * * * * * * * * * * */
 
   const render = async () => {
     if (isVerbose) {
@@ -401,7 +403,7 @@ const ArthasGPT = async (
     };
   };
 
- /* * * * * * * * * * * * * * * * * * * *
+/* * * * * * * * * * * * * * * * * * * *
   *                                     *
   * init                                *
   *                                     *
@@ -456,6 +458,6 @@ const ArthasGPT = async (
   return init();
 };
 
-export {
+module.exports = {
   ArthasGPT
 };

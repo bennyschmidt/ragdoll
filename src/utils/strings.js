@@ -1,11 +1,11 @@
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
-import {
+const {
   ARTHAS_NAME,
   ART_STYLE,
   WRITING_STYLE,
   WRITING_TONE
-} from './persona.js';
+} = require('./persona.js');
 
 dotenv.config();
 
@@ -53,7 +53,7 @@ const arthasPromptPrefix = `Re-write the following message in the first-person, 
 
 const arthasGreeting = GREETING === 'false' ? false : GREETING;
 
-export {
+module.exports = {
   LOADED_CACHED_QUESTION,
   LOADED_CACHED_QUERY,
   LOADED_CACHED_GPT_RESPONSE,

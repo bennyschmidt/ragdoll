@@ -1,5 +1,5 @@
-import { arthasGreeting } from './utils/strings.js';
-import { UIArthasGPT } from './components/UIArthasGPT.js';
+const { arthasGreeting } = require('./utils/strings.js');
+const { UIArthasGPT } = require('./components/UIArthasGPT.js');
 
 // Start the UI application
 
