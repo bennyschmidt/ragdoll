@@ -399,6 +399,7 @@ const ArthasGPT = async (
 
     return {
       image: displayImage,
+      imageURL: imgResponse,
       text: messageResponse
     };
   };
