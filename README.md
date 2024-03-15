@@ -2,6 +2,10 @@
 
 ![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
 
+## Web app
+
+You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
+
 -----
 
 #### Image quality & GUI
@@ -165,7 +169,3 @@ To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
 _Instructions coming soon._
 
 See this [Leonardo.Ai demo](./personas.md#bonus-integrating-with-leonardo-sdk-to-get-amazing-images).
-
-## Web app
-
-You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
