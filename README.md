@@ -121,7 +121,7 @@ Set to `true` to show all logs. Enable `VERBOSE` to see the generated prompts in
 
 `GREETING`
 
-Set to `true` to have the persona initiate the conversation with an introduction.
+Set either a root query (example: `"who are you?"`) to have the persona initiate the conversation with an introduction, or `false` to skip the greeting.
 
 `CACHE`
 
