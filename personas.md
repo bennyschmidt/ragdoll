@@ -15,9 +15,7 @@ WRITING_TONE=careless
 ```
 
 > Question: how do you feel about Zack
-
-(interestingly, this query became "What does Cloud _think_ about Zack?")
-
+>
 > Answer:
 >
 > ![312217025-ec10906b-32da-4dd8-b6f6-62e5b1f3aa82](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/68103d7f-2ea2-4efa-86ba-cd29a223c17f)
@@ -46,7 +44,7 @@ This could be due to the subject matter being about "weapons" and a "hitman" or 
 
 > Wired: Keanu, years ago you put a clause in your contracts saying that your performances couldn’t be manipulated without your say-so. Isn’t that right?
 >
-> Reeves: Yeah, digitally. I don’t mind if someone takes a blink out during an edit. But early on, in the early 2000s, or it might have been the ’90s, I had a performance changed. [He won’t say which.] They added a tear to my face, and I was just like, “Huh?!” It was like, I don’t even have to be here.
+> Reeves: Yeah, digitally. I don’t mind if someone takes a blink out during an edit. But early on, in the early 2000s, or it might have been the ’90s, I had a performance changed. They added a tear to my face, and I was just like, “Huh?!” It was like, I don’t even have to be here.
 >
 > ...
 >
@@ -111,15 +109,13 @@ But for an image, we get the same result as John Wick:
 
 > `Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system.`
 
-(after several attempts I could not get an image of Joe Rogan)
-
 -----
 
 #### Best use cases
 
 With enough `knowledge` you'll get more answerable questions, and the more fictional your persona, the less likely it is to be blocked for security reasons.
 
-The best use cases seem to be transactional conversations with fictional characters, relating to knowledge or inventory within a narrow sphere of understanding (ideally in a hypothetical, PG-13 universe), meaning: Online storytellers, video game NPCs, cartoon characters, customer service agents, influencers, and so-on. Deceivingly difficult roles include: Doctors, lawyers, newscasters, celebrities, and clergy, despite having huge bodies of fixed knowledge readily available online. Due to the sensitive and often subjective nature of their knowledge, some personas are blocked by OpenAI too often to be useful. Here are a couple of examples that will usually work well:
+The best use cases seem to be transactional conversations with fictional characters, relating to knowledge or inventory within a narrow sphere of understanding (ideally in a hypothetical, PG-13 universe), meaning: Online storytellers, video game NPCs, cartoon characters, customer service agents, influencers, and so-on. Here are a couple more cases:
 
 ## Link (from Zelda)
 
@@ -144,7 +140,7 @@ In this example, we're [running middleware](https://github.com/bennyschmidt/Arth
 ![312284042-f826731f-0a1f-4e9d-807f-d4c2f754cbc4](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/980ce6ae-a39b-46c8-8d9f-99cf0fd2cb57)
 ![312284040-2071aec6-71c6-4dc5-a08c-1ae7a23cdd75](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/b7bc3813-5b2a-4167-a8c1-93e653366a62)
 
-Much better! Fine-tuned models will usually outperform generic ones if you have a specific aesthetic in mind.
+Much better!
 
 ## Alehouse Wench (a random shopkeeper in Final Fantasy XIV)
 
@@ -168,6 +164,4 @@ _Indeed, the Buffalo Milk costs 4 gil. Keep in mind there are dozens if not hund
 
 ![312257245-36d8f336-993a-4b85-8ec2-25f85e82ca14](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/ce91da99-f6fc-4b55-9d45-f83a69ca37d5)
 
-_Google correctly bolds "Buffalo Milk", but incorrectly bolds the wrong price of "3 gil". It's clear that the "1 gil" next to the word "Buffalo Milk" belongs to another item, but unfortunate that Google couldn't truncate that one, and actually show "4 gil" here. In any case, this was the 2nd search result, the 1st one being entirely unrelated._
-
-To me it confirms the power of [llamaindex](https://github.com/run-llama/LlamaIndexTS/)'s vector store and query engine for search and analytics, in addition to these creative tasks.
+_Google correctly bolds "Buffalo Milk", but incorrectly bolds the wrong price of "3 gil". It's clear that the "Cost. 1" next to the word "Buffalo Milk" belongs to another item, but unfortunate that Google couldn't truncate that one, and actually show "Cost. 4" here._
