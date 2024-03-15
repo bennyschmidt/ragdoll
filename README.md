@@ -106,7 +106,14 @@ Delay between requests (in ms), for rate limiting, artificial delays, etc.
 
 `VERBOSE`
 
-Set to `true` to show all logs.
+Set to `true` to show all logs. Enable `VERBOSE` to see the generated prompts in your console, for example, in this case the query was `"how many blood elves have you killed?"`:
+
+```
+<ArthasGPT> ChatGPT (GPT-3.5) Prompt: Re-write the following message in the first-person, as if you are Arthas, in a style that is inspiring but grim, from the year 1200 A.D., using as few characters as possible (never exceed 500), in a tone that is slightly resentful, omitting any references to Earth or real-world society: Arthas killed Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, who were blood elves. So, Arthas has killed three blood elves.
+<ArthasGPT> ChatGPT (GPT-3.5) responded with "I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.".
+<ArthasGPT> Waiting 2 seconds...
+<ArthasGPT> DALL-E (dall-e-2) Prompt: Render the following in the style of Blizzard's World of Warcraft concept art in high resolution like a finely-tuned video game model including each detail and anatomically correct features (if any): I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.
+```
 
 `GREETING`
 
