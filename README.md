@@ -2,11 +2,15 @@
 
 ![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
 
-## Web app
-
-You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
-
 -----
+
+## Benefits
+
+- **Scoped Knowledge**: Using a generic chatbot like ChatGPT for narrow use cases like customer support, a game NPC, or writing code can yield undesired responses, or provide information outside the intended scope of knowledge. You don't want your MMORPG shopkeeper talking about about Ford F-150s or Chick-Fil-A, do you? Arthas scrapes a URL you provide as a knowledge source (usually a Wiki style web page, but could be anything - it's very flexible), and uses [`llamaindex`](https://github.com/run-llama/LlamaIndexTS) to store and index that knowledge. It handles questions that fall outside of the scope of knowledge gracefully, so it will still feel like the user is interacting with a person even when it doesn't know the answer.
+
+- **Distinct Personalities**: Answers to questions are always rephrased from the first-person perspective in the style of a persona that you define (in [`persona.js`](./src/utils/persona.js)). Because you're asked to define things like prose, tone, and even art style, Arthas is able to generate the appropriate prompts for your persona, resulting in statements the target persona would perceivably say.
+
+- **Effortless**: Arthas is really easy to work with, there's only 1 method: `chat(question)` and it returns `{ text, image }`. It can be ran [as an API](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-api), in [a React app](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-react), as [a CLI](https://github.com/bennyschmidt/ArthasGPT/blob/master/src/index.js#L6), or as a [a dependency](https://github.com/bennyschmidt/Arthas.AI/blob/master/arthas-api/api/post/prompt/index.js#L1) in your application.
 
 #### Image quality & GUI
 
@@ -127,7 +131,7 @@ Set either a root query (example: `"who are you?"`) to have the persona initiate
 
 Set to `true` to cache LLM inputs & queries, and GPT/DALL-E prompts, responses, & images.
 
-Caching is highly recommended because OpenAI is expensive and heavily rate limited. Right now, each question costs about 4 cents in OpenAI. Keep in mind the underlying LLM framework [llamaindex](https://github.com/run-llama/LlamaIndexTS) might perform several OpenAI calls even though in this application only 1 is being made, especially with embeddings and considering every question requires at least 2 GPT-3.5 calls and 1 DALL-E call.
+Caching is highly recommended because OpenAI is expensive and heavily rate limited. Right now, each question costs about 4 cents in OpenAI. Keep in mind the underlying LLM framework ([llamaindex](https://github.com/run-llama/LlamaIndexTS)) might perform several OpenAI calls even though in this application only 1 is being made, especially with embeddings and considering every question requires at least 2 GPT-3.5 calls and 1 DALL-E call.
 
 ![312222034-eaad93a1-f28d-454a-9fa5-33ceac658806](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/ca6bedaf-2d30-4fa6-b5e1-0484a0cffbdc)
 
@@ -169,3 +173,7 @@ To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
 _Instructions coming soon._
 
 See this [Leonardo.Ai demo](./personas.md#bonus-integrating-with-leonardo-sdk-to-get-amazing-images).
+
+## Web app
+
+You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
