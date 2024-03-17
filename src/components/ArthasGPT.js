@@ -63,6 +63,11 @@ const {
   waiting
 } = require('../utils/strings.js');
 
+const {
+  prefixOutputText,
+  prefixOutputImage
+} = require('../utils/prefix.js');
+
 // Persona configs
 
 dotenv.config();
@@ -137,11 +142,11 @@ const ArthasGPT = async config => {
 
   // Prefix output prompt (text)
 
-  const arthasPromptPrefix = `Re-write the following message in the first-person, as if you are ${name}, in a style that is ${writingStyle}, using as few characters as possible (never exceed 500), in a tone that is ${writingTone}, omitting any references to Earth or real-world society:`;
+  const arthasPromptPrefix = prefixOutputText(config);
 
   // Prefix output prompt (image)
 
-  const imagePromptPrefix = `Render the following in the style of ${artStyle}:`;
+  const imagePromptPrefix = prefixOutputImage(config);
 
   const { default: terminalImage } = await import('terminal-image');
 

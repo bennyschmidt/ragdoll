@@ -28,10 +28,10 @@ const {
   EXIT,
   languageModel,
   gptLogPrefix,
-  waiting,
-  placeholder,
-  povPromptPrefix
+  waiting
 } = require('../utils/strings.js');
+
+const { prefixInput } = require('../utils/prefix.js');
 
 const { ArthasGPT } = require('./ArthasGPT.js');
 
@@ -63,7 +63,7 @@ const ArthasGPTCommandLine = async config => {
 
   // Prefix input prompt
 
-  const povPromptPrefix = `If and only if the following input is written in first-person (e.g. use of "you", etc.), re-write it about ${name} in third-person using as few characters as possible (never exceed 500) - for example "who are you" should just be "Who is ${name}?", with no mention of the first-person input, however if the subject is not "you" or "${name}" then keep the subject as-is:`;
+  const povPromptPrefix = prefixInput(config);
 
   const ui = readline.createInterface({
     input: process.stdin,

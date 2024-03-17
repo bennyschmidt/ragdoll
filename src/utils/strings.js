@@ -1,20 +1,12 @@
 const dotenv = require('dotenv');
 
-const {
-  ARTHAS_NAME,
-  ART_STYLE,
-  WRITING_STYLE,
-  WRITING_TONE
-} = require('./persona.js');
-
 dotenv.config();
 
 const {
   LLM_FRAMEWORK,
   LANGUAGE_MODEL,
   IMAGE_MODEL,
-  DELAY,
-  GREETING
+  DELAY
 } = process.env;
 
 const LOADED_CACHED_QUESTION = 'User question loaded from cache.';
