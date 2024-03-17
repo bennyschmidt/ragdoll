@@ -1,6 +1,5 @@
 
 const dotenv = require('dotenv');
-const textract = require('textract');
 const OpenAI = require('openai');
 
 const {
@@ -28,6 +27,8 @@ const {
   delay
 } = require('../utils/output.js');
 
+const { extractFromURL } = require('../utils/extraction.js');
+
 // Human-readable strings
 
 const {
@@ -42,11 +43,9 @@ const {
   CREATING_QUERY_ENGINE,
   STARTING,
   DONE,
-  DEFAULT_ANSWER,
   DEFAULT_NAME,
   DEFAULT_KNOWLEDGE_URI,
   DEFAULT_ART_STYLE,
-  DEFAULT_WRITING_TONE,
   DEFAULT_WRITING_STYLE,
   DALLE_ERROR,
   CONFIG_ERROR,
@@ -102,7 +101,6 @@ const ArthasGPT = async config => {
     name = DEFAULT_NAME,
     artStyle = DEFAULT_ART_STYLE,
     writingStyle = DEFAULT_WRITING_STYLE,
-    writingTone = DEFAULT_WRITING_TONE,
     query
   } = config;
 
@@ -165,16 +163,16 @@ const ArthasGPT = async config => {
   }
 
   /* * * * * * * * * * * * * * * * * * * *
-  *                                     *
-  * createIndex                         *
-  *                                     *
-  * Create a document from fetched      *
-  * text data and add an indexed        *
-  * store for library access.           *
-  *                                     *
-  * text: string                        *
-  *                                     *
-  * * * * * * * * * * * * * * * * * * * */
+   *                                     *
+   * createIndex                         *
+   *                                     *
+   * Create a document from fetched      *
+   * text data and add an indexed        *
+   * store for library access.           *
+   *                                     *
+   * text: string                        *
+   *                                     *
+   * * * * * * * * * * * * * * * * * * * */
 
   let queryEngine;
 
@@ -204,13 +202,13 @@ const ArthasGPT = async config => {
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-  *                                     *
-  * createQuery                         *
-  *                                     *
-  * Run and cache the user's query      *
-  * to get the core of the prompt.      *
-  *                                     *
-  * * * * * * * * * * * * * * * * * * * */
+   *                                     *
+   * createQuery                         *
+   *                                     *
+   * Run and cache the user's query      *
+   * to get the core of the prompt.      *
+   *                                     *
+   * * * * * * * * * * * * * * * * * * * */
 
   const createQuery = async () => {
     const queryCache = recall(query);
@@ -242,14 +240,14 @@ const ArthasGPT = async config => {
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-  *                                     *
-  * invokeChatAgent                     *
-  *                                     *
-  * Complete the prompt by decorating   *
-  * it in the defined style and send to *
-  * ChatGPT.                            *
-  *                                     *
-  * * * * * * * * * * * * * * * * * * * */
+   *                                     *
+   * invokeChatAgent                     *
+   *                                     *
+   * Complete the prompt by decorating   *
+   * it in the defined style and send to *
+   * ChatGPT.                            *
+   *                                     *
+   * * * * * * * * * * * * * * * * * * * */
 
   let message;
   let messageResponse;
@@ -300,15 +298,15 @@ const ArthasGPT = async config => {
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-  *                                     *
-  * invokeImageAgent                    *
-  *                                     *
-  * With the ChatGPT response now in    *
-  * first-person from the persona, send *
-  * to DALL-E to get an image that      *
-  * corresponds with the text.          *
-  *                                     *
-  * * * * * * * * * * * * * * * * * * * */
+   *                                     *
+   * invokeImageAgent                    *
+   *                                     *
+   * With the ChatGPT response now in    *
+   * first-person from the persona, send *
+   * to DALL-E to get an image that      *
+   * corresponds with the text.          *
+   *                                     *
+   * * * * * * * * * * * * * * * * * * * */
 
   // Create prompt to render an image in the defined style
 
@@ -356,18 +354,18 @@ const ArthasGPT = async config => {
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-  *                                     *
-  * respond                             *
-  *                                     *
-  * Lifecycle method called when        *
-  * the agent has stored new data       *
-  * and should respond with text        *
-  * and an image.                       *
-  *                                     *
-  * error?: any                         *
-  * text: string                        *
-  *                                     *
-  * * * * * * * * * * * * * * * * * * * */
+   *                                     *
+   * respond                             *
+   *                                     *
+   * Lifecycle method called when        *
+   * the agent has stored new data       *
+   * and should respond with text        *
+   * and an image.                       *
+   *                                     *
+   * error?: any                         *
+   * text: string                        *
+   *                                     *
+   * * * * * * * * * * * * * * * * * * * */
 
   const respond = async (error, text) => {
     if (isVerbose) {
@@ -394,15 +392,15 @@ const ArthasGPT = async config => {
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-  *                                     *
-  * chat                                *
-  *                                     *
-  * Pass additional queries to an       *
-  * instantiated Arthas.                *
-  *                                     *
-  * input: string                       *
-  *                                     *
-  * * * * * * * * * * * * * * * * * * * */
+   *                                     *
+   * chat                                *
+   *                                     *
+   * Pass additional queries to an       *
+   * instantiated Arthas.                *
+   *                                     *
+   * input: string                       *
+   *                                     *
+   * * * * * * * * * * * * * * * * * * * */
 
   const chat = async input => {
     const knowledgeCache = recall(knowledgeURI);
@@ -417,13 +415,13 @@ const ArthasGPT = async config => {
   };
 
   /* * * * * * * * * * * * * * * * * * * *
-  *                                     *
-  * render                              *
-  *                                     *
-  * Return a "Persona Reply" of         *
-  * { image, text } for display.        *
-  *                                     *
-  * * * * * * * * * * * * * * * * * * * */
+   *                                     *
+   * render                              *
+   *                                     *
+   * Return a "Persona Reply" of         *
+   * { image, text } for display.        *
+   *                                     *
+   * * * * * * * * * * * * * * * * * * * */
 
   const render = async () => {
     if (isVerbose) {
@@ -476,7 +474,7 @@ const ArthasGPT = async config => {
     };
   };
 
-/* * * * * * * * * * * * * * * * * * * *
+ /* * * * * * * * * * * * * * * * * * * *
   *                                     *
   * init                                *
   *                                     *
@@ -492,8 +490,7 @@ const ArthasGPT = async config => {
     }
 
     let answer = {
-      image: null,
-      text: DEFAULT_ANSWER
+      pending: true
     };
 
     const knowledgeCache = recall(knowledgeURI);
@@ -511,11 +508,11 @@ const ArthasGPT = async config => {
 
       answer = await respond(null, knowledgeCache);
     } else {
-      textract.fromUrl(knowledgeURI, async (error, text) => {
-        await createIndex(text);
+      const { error, text } = await extractFromURL(knowledgeURI);
 
-        answer = await respond(error, text);
-      });
+      await createIndex(text);
+
+      answer = await respond(error, text);
     }
 
     // Return the answer and a reusable `chat` method
