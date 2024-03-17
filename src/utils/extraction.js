@@ -2,10 +2,10 @@ const textract = require('textract');
 
 const extractFromURL = url => new Promise((resolve, reject) => {
   textract.fromUrl(url, (error, text) => {
-    if (err !== null) {
-      reject(error);
+    if (error) {
+      reject({ error, text });
     } else {
-      resolve(text);
+      resolve({ error, text });
     }
   });
 });
