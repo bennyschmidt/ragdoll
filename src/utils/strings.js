@@ -43,15 +43,20 @@ const gptLogPrefix = `${languageModel} Prompt:`;
 const imageModel = `DALL-E (${IMAGE_MODEL})`;
 const dalleLogPrefix = `${imageModel} Prompt:`;
 const waiting = `Waiting ${DELAY / 1000} seconds...`;
-const placeholder = `What would you like to ask ${ARTHAS_NAME}? `;
 
-const povPromptPrefix = `If and only if the following input is written in first-person (e.g. use of "you", etc.), re-write it about ${ARTHAS_NAME} in third-person using as few characters as possible (never exceed 500) - for example "who are you" should just be "Who is ${ARTHAS_NAME}?", with no mention of the first-person input, however if the subject is not "you" or "${ARTHAS_NAME}" then keep the subject as-is:`;
+const DEFAULT_NAME = 'Arthas';
+const DEFAULT_KNOWLEDGE_URI = 'https://wowpedia.fandom.com/wiki/Arthas_Menethil';
+const DEFAULT_ART_STYLE = `Blizzard's World of Warcraft concept art in high resolution like a fine-tuned video game model including each detail and anatomically correct features (if any)`;
+const DEFAULT_WRITING_STYLE = 'inspiring but grim, from the year 1200 A.D.';
+const DEFAULT_WRITING_TONE = 'slightly annoyed';
 
-const imagePromptPrefix = `Render the following in the style of ${ART_STYLE}:`;
-
-const arthasPromptPrefix = `Re-write the following message in the first-person, as if you are ${ARTHAS_NAME}, in a style that is ${WRITING_STYLE}, using as few characters as possible (never exceed 500), in a tone that is ${WRITING_TONE}, omitting any references to Earth or real-world society:`;
-
-const arthasGreeting = GREETING === 'false' ? false : GREETING;
+const INVALID = 'Missing/invalid';
+const CONFIG_ERROR = `${INVALID} configuration.`;
+const CONFIG_ERROR_KNOWLEDGE_URI = `${INVALID} knowledge URI.`;
+const CONFIG_ERROR_NAME = `${INVALID} name.`;
+const CONFIG_ERROR_ART_STYLE = `${INVALID} art style.`;
+const CONFIG_ERROR_WRITING_STYLE = `${INVALID} writing style.`;
+const CONFIG_ERROR_QUERY = `${INVALID} query.`;
 
 module.exports = {
   LOADED_CACHED_QUESTION,
@@ -64,6 +69,12 @@ module.exports = {
   PREPARING_DISPLAY,
   CREATING_VECTOR_STORE,
   CREATING_QUERY_ENGINE,
+  DEFAULT_ANSWER,
+  DEFAULT_NAME,
+  DEFAULT_KNOWLEDGE_URI,
+  DEFAULT_ART_STYLE,
+  DEFAULT_WRITING_TONE,
+  DEFAULT_WRITING_STYLE,
   STARTING,
   DONE,
   DEFAULT_ANSWER,
@@ -72,16 +83,17 @@ module.exports = {
   BYE,
   EXIT,
   DALLE_ERROR,
+  CONFIG_ERROR,
+  CONFIG_ERROR_KNOWLEDGE_URI,
+  CONFIG_ERROR_NAME,
+  CONFIG_ERROR_ART_STYLE,
+  CONFIG_ERROR_WRITING_STYLE,
+  CONFIG_ERROR_QUERY,
   llmFramework,
   llmLogPrefix,
   languageModel,
   gptLogPrefix,
   imageModel,
   dalleLogPrefix,
-  waiting,
-  placeholder,
-  povPromptPrefix,
-  imagePromptPrefix,
-  arthasPromptPrefix,
-  arthasGreeting
+  waiting
 };

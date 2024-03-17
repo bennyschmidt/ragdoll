@@ -43,21 +43,27 @@ const {
   STARTING,
   DONE,
   DEFAULT_ANSWER,
+  DEFAULT_NAME,
+  DEFAULT_KNOWLEDGE_URI,
+  DEFAULT_ART_STYLE,
+  DEFAULT_WRITING_TONE,
+  DEFAULT_WRITING_STYLE,
   DALLE_ERROR,
+  CONFIG_ERROR,
+  CONFIG_ERROR_KNOWLEDGE_URI,
+  CONFIG_ERROR_NAME,
+  CONFIG_ERROR_ART_STYLE,
+  CONFIG_ERROR_WRITING_STYLE,
+  CONFIG_ERROR_QUERY,
   llmLogPrefix,
   languageModel,
   gptLogPrefix,
   imageModel,
   dalleLogPrefix,
-  waiting,
-  imagePromptPrefix,
-  arthasPromptPrefix,
-  arthasGreeting
+  waiting
 } = require('../utils/strings.js');
 
 // Persona configs
-
-const { KNOWLEDGE_URI } = require('../utils/persona.js');
 
 dotenv.config();
 
@@ -73,17 +79,70 @@ const {
 * Manages state of knowledge          *
 * and responses.                      *
 *                                     *
-* knowledgeURI?: string               *
-* query?: string                      *
-* cache?: boolean                     *
+* config: ArthasGPTConfig             *
 *                                     *
 * * * * * * * * * * * * * * * * * * * */
 
-const ArthasGPT = async (
-  knowledgeURI = KNOWLEDGE_URI,
-  query = arthasGreeting,
-  cache = true
-) => {
+const ArthasGPT = async config => {
+  if (!config) {
+    log(CONFIG_ERROR);
+
+    return;
+  }
+
+  let {
+    cache = true,
+    greeting = false,
+    knowledgeURI = DEFAULT_KNOWLEDGE_URI,
+    name = DEFAULT_NAME,
+    artStyle = DEFAULT_ART_STYLE,
+    writingStyle = DEFAULT_WRITING_STYLE,
+    writingTone = DEFAULT_WRITING_TONE,
+    query
+  } = config;
+
+  if (!knowledgeURI) {
+    log(CONFIG_ERROR_KNOWLEDGE_URI);
+
+    return;
+  }
+
+  if (!name) {
+    log(CONFIG_ERROR_NAME);
+
+    return;
+  }
+
+  if (!artStyle) {
+    log(CONFIG_ERROR_ART_STYLE);
+
+    return;
+  }
+
+  if (!writingStyle) {
+    log(CONFIG_ERROR_WRITING_STYLE);
+
+    return;
+  }
+
+  if (!query && greeting) {
+    query = greeting;
+  }
+
+  if (!query) {
+    log(CONFIG_ERROR_QUERY);
+
+    return;
+  }
+
+  // Prefix output prompt (text)
+
+  const arthasPromptPrefix = `Re-write the following message in the first-person, as if you are ${name}, in a style that is ${writingStyle}, using as few characters as possible (never exceed 500), in a tone that is ${writingTone}, omitting any references to Earth or real-world society:`;
+
+  // Prefix output prompt (image)
+
+  const imagePromptPrefix = `Render the following in the style of ${artStyle}:`;
+
   const { default: terminalImage } = await import('terminal-image');
 
   let queryResponse;

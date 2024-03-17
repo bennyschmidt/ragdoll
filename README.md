@@ -87,7 +87,6 @@ LANGUAGE_MODEL=GPT-3.5
 IMAGE_MODEL=dall-e-2
 DELAY=2000
 VERBOSE=false
-GREETING=false
 CACHE=true
 MAX_STORAGE_KEY_LENGTH=32
 LOG_PREFIX=<ArthasGPT>
@@ -123,10 +122,6 @@ Set to `true` to show all logs. Enable `VERBOSE` to see the generated prompts in
 <ArthasGPT> DALL-E (dall-e-2) Prompt: Render the following in the style of Blizzard's World of Warcraft concept art in high resolution like a finely-tuned video game model including each detail and anatomically correct features (if any): I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.
 ```
 
-`GREETING`
-
-Set either a root query (example: `"who are you?"`) to have the persona initiate the conversation with an introduction, or `false` to skip the greeting.
-
 `CACHE`
 
 Set to `true` to cache LLM inputs & queries, and GPT/DALL-E prompts, responses, & images.
@@ -149,16 +144,21 @@ Path to a temp folder used for cache (default is `./.tmp`).
 
 #### Persona configuration
 
-```
-ARTHAS_NAME=Arthas
-KNOWLEDGE_URI=https://wowpedia.fandom.com/wiki/Arthas_Menethil
-ART_STYLE=Blizzard's World of Warcraft concept art
-WRITING_STYLE=inspiring but grim, from the year 1200 A.D.
-WRITING_TONE=slightly annoyed
+Pass this config object to `ArthasGPT` when you instantiate a new persona.
 
 ```
+const agent = await ArthasGPT({
+  cache,
+  greeting,
+  knowledgeURI,
+  name,
+  artStyle,
+  writingStyle,
+  writingTone,
+  query
+});
 
-Changing these values will result in a [new persona](#custom-personas). See [`/src/utils/persona.js`](./src/utils/persona.js).
+```
 
 #### Run
 

@@ -33,10 +33,6 @@ const {
   povPromptPrefix
 } = require('../utils/strings.js');
 
-// Persona configs
-
-const { KNOWLEDGE_URI } = require('../utils/persona.js');
-
 const { ArthasGPT } = require('./ArthasGPT.js');
 
 dotenv.config();
@@ -45,7 +41,7 @@ const { DELAY } = process.env;
 
 /* * * * * * * * * * * * * * * * * * * *
  *                                     *
- * ArthasGPTCommandLine                         *
+ * ArthasGPTCommandLine                *
  *                                     *
  * Interface layer (based on readline) *
  * for ArthasGPT.                      *
@@ -54,7 +50,21 @@ const { DELAY } = process.env;
 
 let agent;
 
-const ArthasGPTCommandLine = async greeting => {
+const ArthasGPTCommandLine = async config => {
+  const {
+    greeting = false,
+    name,
+    query
+  } = config;
+
+  // Input placeholder (readline)
+
+  const placeholder = `What would you like to ask ${name}? `;
+
+  // Prefix input prompt
+
+  const povPromptPrefix = `If and only if the following input is written in first-person (e.g. use of "you", etc.), re-write it about ${name} in third-person using as few characters as possible (never exceed 500) - for example "who are you" should just be "Who is ${name}?", with no mention of the first-person input, however if the subject is not "you" or "${name}" then keep the subject as-is:`;
+
   const ui = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -67,11 +77,13 @@ const ArthasGPTCommandLine = async greeting => {
       log(CREATING_AGENT);
     }
 
-    agent = await ArthasGPT(
-      KNOWLEDGE_URI,
+    agent = await ArthasGPT({
+      ...config,
+
       greeting,
-      isCacheEnabled
-    );
+      query: greeting ? null : query,
+      cache: isCacheEnabled
+    });
   }
 
   // Prompt user
@@ -127,11 +139,13 @@ const ArthasGPTCommandLine = async greeting => {
         log(CREATING_AGENT);
       }
 
-      agent = await ArthasGPT(
-        KNOWLEDGE_URI,
-        messageResponse,
-        true
-      );
+      agent = await ArthasGPT({
+        ...config,
+
+        greeting,
+        query: messageResponse,
+        cache: true
+      });
     }
 
     ui.question(placeholder, promptUser);
