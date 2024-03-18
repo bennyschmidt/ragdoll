@@ -1,5 +1,5 @@
 const prefixInput = ({ name }) => (
-  `If and only if the following input is written in first-person (e.g. use of "you", etc.), re-write it about ${name} in third-person using as few characters as possible (never exceed 500) - for example "who are you" should just be "Who is ${name}?", with no mention of the first-person input, however if it's already third-person and you are not the subject (e.g. no use of "you", "your", "${name}", etc.) then keep it unaltered:`
+  `If and only if the following input is written in first-person (e.g. use of "you", etc.), re-write it about ${name} in third-person using as few characters as possible (never exceed 500) - for example "who are you" should just be "Who is ${name}?", with no mention of the first-person input, however if it's already third-person and you are not the subject (e.g. no use of "you", "your", "${name}", etc.) then keep it as-is:`
 );
 
 const prefixOutputText = ({ name, writingStyle, writingTone }) => (

@@ -33,8 +33,8 @@ const { extractFromURL } = require('../utils/extraction.js');
 
 const {
   LOADED_CACHED_QUERY,
-  LOADED_CACHED_GPT_RESPONSE,
-  LOADED_CACHED_DALLE_RESPONSE,
+  LOADED_CACHED_TEXT_RESPONSE,
+  LOADED_CACHED_IMAGE_RESPONSE,
   LOADED_CACHED_KNOWLEDGE,
   CACHE_CLEARED,
   PREPARING_RESPONSE,
@@ -47,7 +47,6 @@ const {
   DEFAULT_KNOWLEDGE_URI,
   DEFAULT_ART_STYLE,
   DEFAULT_WRITING_STYLE,
-  DALLE_ERROR,
   CONFIG_ERROR,
   CONFIG_ERROR_KNOWLEDGE_URI,
   CONFIG_ERROR_NAME,
@@ -56,9 +55,10 @@ const {
   CONFIG_ERROR_QUERY,
   llmLogPrefix,
   languageModel,
-  gptLogPrefix,
+  textModelLogPrefix,
   imageModel,
-  dalleLogPrefix,
+  imageModelLogPrefix,
+  imageModelError,
   waiting
 } = require('../utils/strings.js');
 
@@ -245,7 +245,7 @@ const ArthasGPT = async config => {
    *                                     *
    * Complete the prompt by decorating   *
    * it in the defined style and send to *
-   * ChatGPT.                            *
+   * the text model.                     *
    *                                     *
    * * * * * * * * * * * * * * * * * * * */
 
@@ -266,21 +266,21 @@ const ArthasGPT = async config => {
 
     if (messageCache) {
       if (isVerbose) {
-        log(LOADED_CACHED_GPT_RESPONSE);
+        log(LOADED_CACHED_TEXT_RESPONSE);
       }
 
       messageResponse = messageCache;
     } else {
       if (isVerbose) {
-        log(`${gptLogPrefix} ${message}`);
+        log(`${textModelLogPrefix} ${message}`);
       }
 
       try {
-        const { response: gptResponse } = await chatAgent.chat({
+        const { response: textModelResponse } = await chatAgent.chat({
           message
         });
 
-        messageResponse = gptResponse;
+        messageResponse = textModelResponse;
 
         remember(queryString, messageResponse);
       } catch (error) {
@@ -301,10 +301,11 @@ const ArthasGPT = async config => {
    *                                     *
    * invokeImageAgent                    *
    *                                     *
-   * With the ChatGPT response now in    *
+   * With the text response now in       *
    * first-person from the persona, send *
-   * to DALL-E to get an image that      *
-   * corresponds with the text.          *
+   * prompt the image model to get an    *
+   * image that corresponds with the     *
+   * text.                               *
    *                                     *
    * * * * * * * * * * * * * * * * * * * */
 
@@ -319,27 +320,27 @@ const ArthasGPT = async config => {
 
     if (imgCache) {
       if (isVerbose) {
-        log(LOADED_CACHED_DALLE_RESPONSE);
+        log(LOADED_CACHED_IMAGE_RESPONSE);
       }
 
       imgResponse = imgCache;
     } else {
-      const dallePrompt = `${imagePromptPrefix} ${messageResponse}`;
+      const imageModelPrompt = `${imagePromptPrefix} ${messageResponse}`;
 
       if (isVerbose) {
-        log(`${dalleLogPrefix} ${dallePrompt}`);
+        log(`${imageModelLogPrefix} ${imageModelPrompt}`);
       }
 
       try {
-        const dalleResponse = await imageAgent.images.generate({
+        const imageModelResponse = await imageAgent.images.generate({
           model: IMAGE_MODEL,
-          prompt: dallePrompt,
+          prompt: imageModelPrompt,
           size: `${IMAGE_SIZE}x${IMAGE_SIZE}`,
           quality: IMAGE_QUALITY,
           n: 1
         });
 
-        imgResponse = dalleResponse.data[0].url;
+        imgResponse = imageModelResponse.data[0].url;
 
         remember(messageResponse, imgResponse);
       } catch (error) {
@@ -348,7 +349,7 @@ const ArthasGPT = async config => {
       }
 
       if (isVerbose) {
-        log(`${dalleLogPrefix} responded with "${imgResponse}".`);
+        log(`${imageModelLogPrefix} responded with "${imgResponse}".`);
       }
     }
   };
@@ -430,7 +431,7 @@ const ArthasGPT = async config => {
 
     if (!imgResponse) {
       if (isVerbose) {
-        log(DALLE_ERROR);
+        log(imageModelError);
       }
 
       return {

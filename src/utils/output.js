@@ -8,7 +8,7 @@ const {
   LOG_PREFIX
 } = process.env;
 
-// Note that DALL-E 2 has specific size requirements.
+// DALL-E 2 (default model) has specific size requirements.
 // Learn more at https://openai.com/dall-e-2
 
 const IMAGE_SIZE = 1024;

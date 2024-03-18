@@ -27,7 +27,7 @@ const {
   BYE,
   EXIT,
   languageModel,
-  gptLogPrefix,
+  textModelLogPrefix,
   waiting
 } = require('../utils/strings.js');
 
@@ -113,14 +113,14 @@ const ArthasGPTCommandLine = async config => {
       messageResponse = messageCache;
     } else {
       if (isVerbose) {
-        log(`${gptLogPrefix} ${message}`);
+        log(`${textModelLogPrefix} ${message}`);
       }
 
-      const { response: gptResponse } = await chatAgent.chat({
+      const { response: textModelResponse } = await chatAgent.chat({
         message
       });
 
-      messageResponse = gptResponse;
+      messageResponse = textModelResponse;
 
       remember(input, messageResponse);
 

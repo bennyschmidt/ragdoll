@@ -11,8 +11,8 @@ const {
 
 const LOADED_CACHED_QUESTION = 'User question loaded from cache.';
 const LOADED_CACHED_QUERY = 'LLM query loaded from cache.';
-const LOADED_CACHED_GPT_RESPONSE = 'ChatGPT response loaded from cache.';
-const LOADED_CACHED_DALLE_RESPONSE = 'DALL-E response loaded from cache.';
+const LOADED_CACHED_TEXT_RESPONSE = 'Text response loaded from cache.';
+const LOADED_CACHED_IMAGE_RESPONSE = 'Image response loaded from cache.';
 const LOADED_CACHED_KNOWLEDGE = 'Knowledge loaded from cache.';
 const CACHE_CLEARED = 'Cache cleared.';
 const PREPARING_RESPONSE = 'Preparing response...';
@@ -26,20 +26,20 @@ const CREATING_AGENT = 'Creating Arthas agent...';
 const GOODBYE = 'Farewell.';
 const BYE = 'bye';
 const EXIT = 'exit';
-const DALLE_ERROR = 'DALL-E failed to return an image. This could be due to a safety violation, rate limiting, or a network issue.';
 
 const llmFramework = `LLM (${LLM_FRAMEWORK})`;
 const llmLogPrefix = `${llmFramework} query:`;
-const languageModel = `ChatGPT (${LANGUAGE_MODEL})`;
-const gptLogPrefix = `${languageModel} Prompt:`;
-const imageModel = `DALL-E (${IMAGE_MODEL})`;
-const dalleLogPrefix = `${imageModel} Prompt:`;
+const languageModel = `Text model (${LANGUAGE_MODEL})`;
+const textModelLogPrefix = `${languageModel} prompt:`;
+const imageModel = `Image model (${IMAGE_MODEL})`;
+const imageModelLogPrefix = `${imageModel} prompt:`;
 const waiting = `Waiting ${DELAY / 1000} seconds...`;
+const imageModelError = `${imageModel} failed to return an image. This could be due to a safety violation, rate limiting, or a network issue.`;
 
 const DEFAULT_NAME = 'Arthas';
 const DEFAULT_KNOWLEDGE_URI = 'https://wowpedia.fandom.com/wiki/Arthas_Menethil';
 const DEFAULT_ART_STYLE = `Blizzard's World of Warcraft concept art in high resolution like a fine-tuned video game model including each detail and anatomically correct features (if any)`;
-const DEFAULT_WRITING_STYLE = 'inspiring but grim, from the year 1200 A.D.';
+const DEFAULT_WRITING_STYLE = 'inspiring but grim, like from the dark ages';
 const DEFAULT_WRITING_TONE = 'slightly annoyed';
 
 const INVALID = 'Missing/invalid';
@@ -53,8 +53,8 @@ const CONFIG_ERROR_QUERY = `${INVALID} query.`;
 module.exports = {
   LOADED_CACHED_QUESTION,
   LOADED_CACHED_QUERY,
-  LOADED_CACHED_GPT_RESPONSE,
-  LOADED_CACHED_DALLE_RESPONSE,
+  LOADED_CACHED_TEXT_RESPONSE,
+  LOADED_CACHED_IMAGE_RESPONSE,
   LOADED_CACHED_KNOWLEDGE,
   CACHE_CLEARED,
   PREPARING_RESPONSE,
@@ -74,7 +74,6 @@ module.exports = {
   GOODBYE,
   BYE,
   EXIT,
-  DALLE_ERROR,
   CONFIG_ERROR,
   CONFIG_ERROR_KNOWLEDGE_URI,
   CONFIG_ERROR_NAME,
@@ -84,8 +83,9 @@ module.exports = {
   llmFramework,
   llmLogPrefix,
   languageModel,
-  gptLogPrefix,
+  textModelLogPrefix,
   imageModel,
-  dalleLogPrefix,
+  imageModelLogPrefix,
+  imageModelError,
   waiting
 };

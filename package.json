@@ -1,6 +1,6 @@
 {
   "name": "arthasgpt",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "main": "index.js",
   "dependencies": {
     "dotenv": "^16.4.5",
