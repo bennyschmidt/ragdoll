@@ -10,15 +10,21 @@
 
 - **Distinct Personalities**: Answers to questions are always rephrased from the first-person perspective in the style of a persona that you define. Because you're asked to define things like prose, tone, and even art style, Arthas is able to generate the appropriate prompts for your persona, resulting in statements the target persona would perceivably say.
 
-- **Effortless**: Arthas is really easy to work with, there's only 1 method: `chat(question)` and it returns `{ text, image }`. It can be ran [as an API](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-api), in [a React app](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-react), as [a CLI](https://github.com/bennyschmidt/ArthasGPT/blob/master/src/index.js#L6), or as a [a dependency](https://github.com/bennyschmidt/Arthas.AI/blob/master/arthas-api/api/post/prompt/index.js#L1) in your application.
+- **Extensible**: Arthas can be ran [as an API](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-api), in [a React app](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-react), as [a CLI](https://github.com/bennyschmidt/ArthasGPT/blob/master/src/index.js), or as a [a dependency](https://www.npmjs.com/package/arthasgpt) in your application. It defaults to GPT 3.5 for text and DALL-E 2 for images, but you can define your own models too ("bring your own models").
+
+-----
+
+## Web app
+
+You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
+
+-----
+
+## CLI examples
 
 #### Image quality & GUI
 
 Note that in a default Terminal you will not see text colors and the image quality will be diminished. Using a Terminal like [iTerm2](https://iterm2.com) or [Kitty](https://sw.kovidgoyal.net/kitty) will allow you to view the full resolution (1024x1024 by default).
-
------
-
-## Examples
 
 _In native Terminal with no addons:_
 
@@ -116,17 +122,17 @@ Delay between requests (in ms), for rate limiting, artificial delays, etc.
 Set to `true` to show all logs. Enable `VERBOSE` to see the generated prompts in your console, for example, in this case the query was `"how many blood elves have you killed?"`:
 
 ```
-<ArthasGPT> ChatGPT (GPT-3.5) Prompt: Re-write the following message in the first-person, as if you are Arthas, in a style that is inspiring but grim, from the year 1200 A.D., using as few characters as possible (never exceed 500), in a tone that is slightly resentful, omitting any references to Earth or real-world society: Arthas killed Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, who were blood elves. So, Arthas has killed three blood elves.
-<ArthasGPT> ChatGPT (GPT-3.5) responded with "I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.".
+<ArthasGPT> Text (GPT-3.5) Prompt: Re-write the following message in the first-person, as if you are Arthas, in a style that is inspiring but grim, from the year 1200 A.D., using as few characters as possible (never exceed 500), in a tone that is slightly resentful, omitting any references to Earth or real-world society: Arthas killed Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, who were blood elves. So, Arthas has killed three blood elves.
+<ArthasGPT> Text (GPT-3.5) responded with "I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.".
 <ArthasGPT> Waiting 2 seconds...
-<ArthasGPT> DALL-E (dall-e-2) Prompt: Render the following in the style of Blizzard's World of Warcraft concept art in high resolution like a finely-tuned video game model including each detail and anatomically correct features (if any): I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.
+<ArthasGPT> Image (dall-e-2) Prompt: Render the following in the style of Blizzard's World of Warcraft concept art in high resolution like a finely-tuned video game model including each detail and anatomically correct features (if any): I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.
 ```
 
 `CACHE`
 
 Set to `true` to cache LLM inputs & queries, and GPT/DALL-E prompts, responses, & images.
 
-Caching is highly recommended because OpenAI is expensive and heavily rate limited. Right now, each question costs about 4 cents in OpenAI. Keep in mind the underlying LLM framework ([llamaindex](https://github.com/run-llama/LlamaIndexTS)) might perform several OpenAI calls even though in this application only 1 is being made, especially with embeddings and considering every question requires at least 2 GPT-3.5 calls and 1 DALL-E call.
+Caching is highly recommended because OpenAI is expensive and heavily rate limited. Right now, a question can cost up to 4 cents in OpenAI. Keep in mind the underlying LLM framework ([llamaindex](https://github.com/run-llama/LlamaIndexTS)) might perform several OpenAI calls even though in this application only 1 is being made, especially with embeddings and considering every question requires at least 2 GPT-3.5 calls and 1 DALL-E call.
 
 ![312222034-eaad93a1-f28d-454a-9fa5-33ceac658806](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/ca6bedaf-2d30-4fa6-b5e1-0484a0cffbdc)
 
@@ -167,13 +173,9 @@ const agent = await ArthasGPT({
 ## Middleware
 
 To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
-  1. LLM query: Run the formatted prompt through another transformer (instead of ChatGPT)
-  2. Transformed response: Run the final image prompt through a different image model (instead of DALL-E)
+  1. LLM query: Run the formatted prompt through another transformer (instead of GPT 3.5)
+  2. Transformed response: Run the final image prompt through a different image model (instead of DALL-E 2)
 
 _Instructions coming soon._
 
 See this [Leonardo.Ai demo](./personas.md#bonus-integrating-with-leonardo-sdk-to-get-amazing-images).
-
-## Web app
-
-You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
