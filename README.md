@@ -126,7 +126,7 @@ Set to `true` to show all logs. Enable `VERBOSE` to see the generated prompts in
 
 Set to `true` to cache LLM inputs & queries, and GPT/DALL-E prompts, responses, & images.
 
-Caching is highly recommended because OpenAI is expensive and heavily rate limited. Right now, each question costs about 4 cents in OpenAI. Keep in mind the underlying LLM framework ([llamaindex](https://github.com/run-llama/LlamaIndexTS)) might perform several OpenAI calls even though in this application only 1 is being made, especially with embeddings and considering every question requires at least 2 GPT-3.5 calls and 1 DALL-E call.
+Caching is highly recommended because OpenAI is expensive and heavily rate limited. Right now, a question can cost up to 4 cents in OpenAI. Keep in mind the underlying LLM framework ([llamaindex](https://github.com/run-llama/LlamaIndexTS)) might perform several OpenAI calls even though in this application only 1 is being made, especially with embeddings and considering every question requires at least 2 GPT-3.5 calls and 1 DALL-E call.
 
 ![312222034-eaad93a1-f28d-454a-9fa5-33ceac658806](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/ca6bedaf-2d30-4fa6-b5e1-0484a0cffbdc)
 
