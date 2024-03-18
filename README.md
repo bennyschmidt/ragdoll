@@ -12,13 +12,19 @@
 
 - **Extensible**: Arthas can be ran [as an API](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-api), in [a React app](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-react), as [a CLI](https://github.com/bennyschmidt/ArthasGPT/blob/master/src/index.js#L6), or as a [a dependency](https://github.com/bennyschmidt/Arthas.AI/blob/master/arthas-api/api/post/prompt/index.js#L1) in your application. It defaults to GPT 3.5 for text and DALL-E 2 for images, but you can define your own models too ("bring your own models").
 
-#### Image quality & GUI
+-----
 
-Note that in a default Terminal you will not see text colors and the image quality will be diminished. Using a Terminal like [iTerm2](https://iterm2.com) or [Kitty](https://sw.kovidgoyal.net/kitty) will allow you to view the full resolution (1024x1024 by default).
+## Web app
+
+You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
 
 -----
 
-## Examples
+## CLI examples
+
+#### Image quality & GUI
+
+Note that in a default Terminal you will not see text colors and the image quality will be diminished. Using a Terminal like [iTerm2](https://iterm2.com) or [Kitty](https://sw.kovidgoyal.net/kitty) will allow you to view the full resolution (1024x1024 by default).
 
 _In native Terminal with no addons:_
 
@@ -173,7 +179,3 @@ To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
 _Instructions coming soon._
 
 See this [Leonardo.Ai demo](./personas.md#bonus-integrating-with-leonardo-sdk-to-get-amazing-images).
-
-## Web app
-
-You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
