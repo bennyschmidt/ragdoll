@@ -99,7 +99,7 @@ const ArthasGPT = async config => {
     greeting = false,
     knowledgeURI = DEFAULT_KNOWLEDGE_URI,
     name = DEFAULT_NAME,
-    artStyle = DEFAULT_ART_STYLE,
+    artStyle = '',
     writingStyle = DEFAULT_WRITING_STYLE,
     query
   } = config;
@@ -112,12 +112,6 @@ const ArthasGPT = async config => {
 
   if (!name) {
     log(CONFIG_ERROR_NAME);
-
-    return;
-  }
-
-  if (!artStyle) {
-    log(CONFIG_ERROR_ART_STYLE);
 
     return;
   }
@@ -387,7 +381,9 @@ const ArthasGPT = async config => {
 
     await invokeChatAgent();
 
-    await invokeImageAgent();
+    if (artStyle) {
+      await invokeImageAgent();
+    }
 
     return render();
   };
@@ -430,7 +426,7 @@ const ArthasGPT = async config => {
     }
 
     if (!imgResponse) {
-      if (isVerbose) {
+      if (isVerbose && artStyle) {
         log(imageModelError);
       }
 
