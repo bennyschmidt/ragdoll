@@ -178,4 +178,4 @@ To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
 
 _Instructions coming soon._
 
-See this [Leonardo.Ai demo](./personas.md#bonus-integrating-with-leonardo-sdk-to-get-amazing-images).
+See this [this issue](https://github.com/bennyschmidt/ArthasGPT/issues/1) for more info.
