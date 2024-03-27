@@ -89,7 +89,7 @@ Set up the environment.
 ```
 OPENAI_API_KEY=
 LLM_FRAMEWORK=llamaindex
-LANGUAGE_MODEL=GPT-3.5
+TEXT_MODEL=GPT-3.5
 IMAGE_MODEL=dall-e-2
 DELAY=2000
 VERBOSE=false
@@ -105,7 +105,7 @@ STORAGE_URI=./.tmp
 
 Your OpenAI API key.
 
-`LANGUAGE_MODEL`
+`TEXT_MODEL`
 
 Example: `GPT-3.5`.
 

@@ -15,8 +15,7 @@ ArthasGPTCommandLine({
   greeting: false,
   knowledgeURI: DEFAULT_KNOWLEDGE_URI,
   name: DEFAULT_NAME,
-  // artStyle: DEFAULT_ART_STYLE,
-  artStyle: null,
+  artStyle: DEFAULT_ART_STYLE,
   writingStyle: DEFAULT_WRITING_STYLE,
   writingTone: DEFAULT_WRITING_TONE,
   query: null

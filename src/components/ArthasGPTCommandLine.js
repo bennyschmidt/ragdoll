@@ -26,8 +26,8 @@ const {
   GOODBYE,
   BYE,
   EXIT,
-  LANGUAGE_MODEL,
-  languageModel,
+  TEXT_MODEL,
+  textModel,
   textModelLogPrefix,
   waiting
 } = require('../utils/strings.js');
@@ -104,7 +104,7 @@ const ArthasGPTCommandLine = async config => {
     }
 
     const chatAgent = new Ollama({
-      model: LANGUAGE_MODEL
+      model: TEXT_MODEL
     });
 
     // Create prompt transforming the user input into the third-person
@@ -126,7 +126,7 @@ const ArthasGPTCommandLine = async config => {
       }
 
       const { message: textModelResponse } = await chatAgent.chat({
-        model: LANGUAGE_MODEL,
+        model: TEXT_MODEL,
         messages: [
           {
             role: 'user',
@@ -140,7 +140,7 @@ const ArthasGPTCommandLine = async config => {
       remember(input, messageResponse);
 
       if (isVerbose) {
-        log(`${languageModel} responded with "${messageResponse}".`);
+        log(`${textModel} responded with "${messageResponse}".`);
         log(waiting);
       }
 

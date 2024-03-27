@@ -4,7 +4,7 @@ dotenv.config();
 
 const {
   LLM_FRAMEWORK,
-  LANGUAGE_MODEL,
+  TEXT_MODEL,
   IMAGE_MODEL,
   DELAY
 } = process.env;
@@ -29,8 +29,8 @@ const EXIT = 'exit';
 
 const llmFramework = `LLM (${LLM_FRAMEWORK})`;
 const llmLogPrefix = `${llmFramework} query:`;
-const languageModel = `Text model (${LANGUAGE_MODEL})`;
-const textModelLogPrefix = `${languageModel} prompt:`;
+const textModel = `Text model (${TEXT_MODEL})`;
+const textModelLogPrefix = `${textModel} prompt:`;
 const imageModel = `Image model (${IMAGE_MODEL})`;
 const imageModelLogPrefix = `${imageModel} prompt:`;
 const waiting = `Waiting ${DELAY / 1000} seconds...`;
@@ -80,10 +80,10 @@ module.exports = {
   CONFIG_ERROR_ART_STYLE,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
-  LANGUAGE_MODEL,
+  TEXT_MODEL,
   llmFramework,
   llmLogPrefix,
-  languageModel,
+  textModel,
   textModelLogPrefix,
   imageModel,
   imageModelLogPrefix,

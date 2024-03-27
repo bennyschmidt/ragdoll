@@ -23,7 +23,6 @@ const {
 
 const {
   IMAGE_SIZE,
-  IMAGE_QUALITY,
   isRendered,
   isVerbose,
   log,
@@ -54,9 +53,9 @@ const {
   CONFIG_ERROR_NAME,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
-  LANGUAGE_MODEL,
+  TEXT_MODEL,
   llmLogPrefix,
-  languageModel,
+  textModel,
   textModelLogPrefix,
   imageModel,
   imageModelLogPrefix,
@@ -74,7 +73,7 @@ const {
 dotenv.config();
 
 const {
-  IMAGE_MODEL,
+  STABLE_DIFFUSION_URI,
   DELAY
 } = process.env;
 
@@ -186,10 +185,10 @@ const ArthasGPT = async config => {
       {
         serviceContext: {
           llm: new Ollama({
-            model: LANGUAGE_MODEL
+            model: TEXT_MODEL
           }),
           embedModel: new OllamaEmbedding({
-            model: LANGUAGE_MODEL
+            model: TEXT_MODEL
           }),
           promptHelper: new PromptHelper(),
           nodeParser: new SimpleNodeParser(),
@@ -268,7 +267,7 @@ const ArthasGPT = async config => {
 
   const invokeChatAgent = async () => {
     const chatAgent = new Ollama({
-      model: LANGUAGE_MODEL
+      model: TEXT_MODEL
     });
 
     queryString = queryResponse.toString();
@@ -292,7 +291,7 @@ const ArthasGPT = async config => {
 
       try {
         const { message: textModelResponse } = await chatAgent.chat({
-          model: LANGUAGE_MODEL,
+          model: TEXT_MODEL,
           messages: [
             {
               role: 'user',
@@ -305,12 +304,12 @@ const ArthasGPT = async config => {
 
         remember(queryString, messageResponse);
       } catch (error) {
-        log(`${languageModel} error: ${error?.message}`);
+        log(`${textModel} error: ${error?.message}`);
         messageResponse = error?.message;
       }
 
       if (isVerbose) {
-        log(`${languageModel} responded with "${messageResponse}".`);
+        log(`${textModel} responded with "${messageResponse}".`);
         log(waiting);
       }
 
@@ -335,15 +334,6 @@ const ArthasGPT = async config => {
   let imgResponse;
 
   const invokeImageAgent = async () => {
-    // TODO: No image model support in
-    // ollama yet
-
-    const imageAgent = {
-      images: {
-        generate: () => {}
-      }
-    };
-
     const imgCache = recall(messageResponse);
 
     if (imgCache) {
@@ -360,15 +350,30 @@ const ArthasGPT = async config => {
       }
 
       try {
-        const imageModelResponse = await imageAgent.images.generate({
-          model: IMAGE_MODEL,
-          prompt: imageModelPrompt,
-          size: `${IMAGE_SIZE}x${IMAGE_SIZE}`,
-          quality: IMAGE_QUALITY,
-          n: 1
+        const imageModelResponse = await fetch(`${STABLE_DIFFUSION_URI}/sdapi/v1/txt2img`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            prompt: imageModelPrompt,
+            width: IMAGE_SIZE,
+            height: IMAGE_SIZE
+          })
         });
 
-        imgResponse = imageModelResponse.data[0].url;
+        if (imageModelResponse?.ok) {
+          const result = await imageModelResponse.json();
+
+          if (result?.images) {
+            const base64URL = `data:image/png;base64,${result.images.shift()}`;
+
+            imgResponse = base64URL;
+          }
+        }
+
+        console.log('imgResponse', imgResponse);
 
         remember(messageResponse, imgResponse);
       } catch (error) {
