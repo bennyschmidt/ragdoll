@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const readline = require('readline');
-const { OpenAIAgent } = require('llamaindex');
+const { Ollama } = require('llamaindex');
 
 // Storage utils
 
@@ -26,7 +26,8 @@ const {
   GOODBYE,
   BYE,
   EXIT,
-  languageModel,
+  TEXT_MODEL,
+  textModel,
   textModelLogPrefix,
   waiting
 } = require('../utils/strings.js');
@@ -89,6 +90,12 @@ const ArthasGPTCommandLine = async config => {
   // Prompt user
 
   const promptUser = async input => {
+    if (!input || input.length < 3) {
+      ui.question(placeholder, promptUser);
+
+      return;
+    }
+
     const inputLowerCase = input.toLowerCase();
 
     if (inputLowerCase === BYE || inputLowerCase === EXIT) {
@@ -96,7 +103,9 @@ const ArthasGPTCommandLine = async config => {
       process.exit();
     }
 
-    const chatAgent = new OpenAIAgent({});
+    const chatAgent = new Ollama({
+      model: TEXT_MODEL
+    });
 
     // Create prompt transforming the user input into the third-person
 
@@ -116,16 +125,22 @@ const ArthasGPTCommandLine = async config => {
         log(`${textModelLogPrefix} ${message}`);
       }
 
-      const { response: textModelResponse } = await chatAgent.chat({
-        message
+      const { message: textModelResponse } = await chatAgent.chat({
+        model: TEXT_MODEL,
+        messages: [
+          {
+            role: 'user',
+            content: message
+          }
+        ]
       });
 
-      messageResponse = textModelResponse;
+      messageResponse = textModelResponse?.content;
 
       remember(input, messageResponse);
 
       if (isVerbose) {
-        log(`${languageModel} responded with "${messageResponse}".`);
+        log(`${textModel} responded with "${messageResponse}".`);
         log(waiting);
       }
 

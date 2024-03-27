@@ -1,11 +1,14 @@
 
 const dotenv = require('dotenv');
-const OpenAI = require('openai');
 
 const {
   Document,
   VectorStoreIndex,
-  OpenAIAgent
+  OllamaEmbedding,
+  Ollama,
+  PromptHelper,
+  SimpleNodeParser,
+  CallbackManager
 } = require('llamaindex');
 
 // Storage utils
@@ -20,7 +23,6 @@ const {
 
 const {
   IMAGE_SIZE,
-  IMAGE_QUALITY,
   isRendered,
   isVerbose,
   log,
@@ -45,16 +47,15 @@ const {
   DONE,
   DEFAULT_NAME,
   DEFAULT_KNOWLEDGE_URI,
-  DEFAULT_ART_STYLE,
   DEFAULT_WRITING_STYLE,
   CONFIG_ERROR,
   CONFIG_ERROR_KNOWLEDGE_URI,
   CONFIG_ERROR_NAME,
-  CONFIG_ERROR_ART_STYLE,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
+  TEXT_MODEL,
   llmLogPrefix,
-  languageModel,
+  textModel,
   textModelLogPrefix,
   imageModel,
   imageModelLogPrefix,
@@ -72,7 +73,7 @@ const {
 dotenv.config();
 
 const {
-  IMAGE_MODEL,
+  STABLE_DIFFUSION_URI,
   DELAY
 } = process.env;
 
@@ -179,7 +180,22 @@ const ArthasGPT = async config => {
       log(CREATING_VECTOR_STORE);
     }
 
-    const index = await VectorStoreIndex.fromDocuments([document]);
+    const index = await VectorStoreIndex.fromDocuments(
+      [document],
+      {
+        serviceContext: {
+          llm: new Ollama({
+            model: TEXT_MODEL
+          }),
+          embedModel: new OllamaEmbedding({
+            model: TEXT_MODEL
+          }),
+          promptHelper: new PromptHelper(),
+          nodeParser: new SimpleNodeParser(),
+          callbackManager: new CallbackManager()
+        }
+      }
+    );
 
     if (isVerbose) {
       log(DONE);
@@ -218,9 +234,11 @@ const ArthasGPT = async config => {
         log(`${llmLogPrefix} ${query}`);
       }
 
-      queryResponse = await queryEngine.query({
+      const { response } = await queryEngine.query({
         query
       });
+
+      queryResponse = response;
 
       remember(query, queryResponse);
     }
@@ -248,7 +266,9 @@ const ArthasGPT = async config => {
   let queryString;
 
   const invokeChatAgent = async () => {
-    const chatAgent = new OpenAIAgent({});
+    const chatAgent = new Ollama({
+      model: TEXT_MODEL
+    });
 
     queryString = queryResponse.toString();
 
@@ -270,20 +290,26 @@ const ArthasGPT = async config => {
       }
 
       try {
-        const { response: textModelResponse } = await chatAgent.chat({
-          message
+        const { message: textModelResponse } = await chatAgent.chat({
+          model: TEXT_MODEL,
+          messages: [
+            {
+              role: 'user',
+              content: message
+            }
+          ]
         });
 
-        messageResponse = textModelResponse;
+        messageResponse = textModelResponse?.content;
 
         remember(queryString, messageResponse);
       } catch (error) {
-        log(`${languageModel} error: ${error?.message}`);
+        log(`${textModel} error: ${error?.message}`);
         messageResponse = error?.message;
       }
 
       if (isVerbose) {
-        log(`${languageModel} responded with "${messageResponse}".`);
+        log(`${textModel} responded with "${messageResponse}".`);
         log(waiting);
       }
 
@@ -308,8 +334,6 @@ const ArthasGPT = async config => {
   let imgResponse;
 
   const invokeImageAgent = async () => {
-    const imageAgent = new OpenAI();
-
     const imgCache = recall(messageResponse);
 
     if (imgCache) {
@@ -326,15 +350,30 @@ const ArthasGPT = async config => {
       }
 
       try {
-        const imageModelResponse = await imageAgent.images.generate({
-          model: IMAGE_MODEL,
-          prompt: imageModelPrompt,
-          size: `${IMAGE_SIZE}x${IMAGE_SIZE}`,
-          quality: IMAGE_QUALITY,
-          n: 1
+        const imageModelResponse = await fetch(`${STABLE_DIFFUSION_URI}/sdapi/v1/txt2img`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            prompt: imageModelPrompt,
+            width: IMAGE_SIZE,
+            height: IMAGE_SIZE
+          })
         });
 
-        imgResponse = imageModelResponse.data[0].url;
+        if (imageModelResponse?.ok) {
+          const result = await imageModelResponse.json();
+
+          if (result?.images) {
+            const base64URL = `data:image/png;base64,${result.images.shift()}`;
+
+            imgResponse = base64URL;
+          }
+        }
+
+        console.log('imgResponse', imgResponse);
 
         remember(messageResponse, imgResponse);
       } catch (error) {
@@ -428,6 +467,10 @@ const ArthasGPT = async config => {
     if (!imgResponse) {
       if (isVerbose && artStyle) {
         log(imageModelError);
+      }
+
+      if (messageResponse) {
+        console.log(`%c${messageResponse}`, 'color: dodgerblue');
       }
 
       return {

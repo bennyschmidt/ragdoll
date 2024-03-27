@@ -4,7 +4,7 @@ dotenv.config();
 
 const {
   LLM_FRAMEWORK,
-  LANGUAGE_MODEL,
+  TEXT_MODEL,
   IMAGE_MODEL,
   DELAY
 } = process.env;
@@ -29,8 +29,8 @@ const EXIT = 'exit';
 
 const llmFramework = `LLM (${LLM_FRAMEWORK})`;
 const llmLogPrefix = `${llmFramework} query:`;
-const languageModel = `Text model (${LANGUAGE_MODEL})`;
-const textModelLogPrefix = `${languageModel} prompt:`;
+const textModel = `Text model (${TEXT_MODEL})`;
+const textModelLogPrefix = `${textModel} prompt:`;
 const imageModel = `Image model (${IMAGE_MODEL})`;
 const imageModelLogPrefix = `${imageModel} prompt:`;
 const waiting = `Waiting ${DELAY / 1000} seconds...`;
@@ -39,7 +39,7 @@ const imageModelError = `${imageModel} failed to return an image. This could be 
 const DEFAULT_NAME = 'Arthas';
 const DEFAULT_KNOWLEDGE_URI = 'https://wowpedia.fandom.com/wiki/Arthas_Menethil';
 const DEFAULT_ART_STYLE = `Blizzard's World of Warcraft concept art in high resolution like a fine-tuned video game model including each detail and anatomically correct features (if any)`;
-const DEFAULT_WRITING_STYLE = 'inspiring but grim, like from the dark ages';
+const DEFAULT_WRITING_STYLE = 'inspiring but grim, like from the dark ages, excluding asterisk-based interjections like "*sigh*"';
 const DEFAULT_WRITING_TONE = 'slightly annoyed';
 
 const INVALID = 'Missing/invalid';
@@ -80,9 +80,10 @@ module.exports = {
   CONFIG_ERROR_ART_STYLE,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
+  TEXT_MODEL,
   llmFramework,
   llmLogPrefix,
-  languageModel,
+  textModel,
   textModelLogPrefix,
   imageModel,
   imageModelLogPrefix,

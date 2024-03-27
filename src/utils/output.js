@@ -8,10 +8,9 @@ const {
   LOG_PREFIX
 } = process.env;
 
-// DALL-E 2 (default model) has specific size requirements.
-// Learn more at https://openai.com/dall-e-2
+// Some models have specific size requirements
 
-const IMAGE_SIZE = 1024;
+const IMAGE_SIZE = 512;
 const IMAGE_QUALITY = 'standard';
 
 const isVerbose = VERBOSE === 'false' ? false : VERBOSE;
