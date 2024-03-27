@@ -1,5 +1,7 @@
 # ArthasGPT
 
+Bring your RAG applications to life with characters that have distinct knowledge and personalities. 
+
 ![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
 
 -----
