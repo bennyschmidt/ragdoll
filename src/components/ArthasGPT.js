@@ -1,11 +1,14 @@
 
 const dotenv = require('dotenv');
-const OpenAI = require('openai');
 
 const {
   Document,
   VectorStoreIndex,
-  OpenAIAgent
+  OllamaEmbedding,
+  Ollama,
+  PromptHelper,
+  SimpleNodeParser,
+  CallbackManager
 } = require('llamaindex');
 
 // Storage utils
@@ -45,14 +48,13 @@ const {
   DONE,
   DEFAULT_NAME,
   DEFAULT_KNOWLEDGE_URI,
-  DEFAULT_ART_STYLE,
   DEFAULT_WRITING_STYLE,
   CONFIG_ERROR,
   CONFIG_ERROR_KNOWLEDGE_URI,
   CONFIG_ERROR_NAME,
-  CONFIG_ERROR_ART_STYLE,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
+  LANGUAGE_MODEL,
   llmLogPrefix,
   languageModel,
   textModelLogPrefix,
@@ -179,7 +181,22 @@ const ArthasGPT = async config => {
       log(CREATING_VECTOR_STORE);
     }
 
-    const index = await VectorStoreIndex.fromDocuments([document]);
+    const index = await VectorStoreIndex.fromDocuments(
+      [document],
+      {
+        serviceContext: {
+          llm: new Ollama({
+            model: LANGUAGE_MODEL
+          }),
+          embedModel: new OllamaEmbedding({
+            model: LANGUAGE_MODEL
+          }),
+          promptHelper: new PromptHelper(),
+          nodeParser: new SimpleNodeParser(),
+          callbackManager: new CallbackManager()
+        }
+      }
+    );
 
     if (isVerbose) {
       log(DONE);
@@ -218,9 +235,11 @@ const ArthasGPT = async config => {
         log(`${llmLogPrefix} ${query}`);
       }
 
-      queryResponse = await queryEngine.query({
+      const { response } = await queryEngine.query({
         query
       });
+
+      queryResponse = response;
 
       remember(query, queryResponse);
     }
@@ -248,7 +267,9 @@ const ArthasGPT = async config => {
   let queryString;
 
   const invokeChatAgent = async () => {
-    const chatAgent = new OpenAIAgent({});
+    const chatAgent = new Ollama({
+      model: LANGUAGE_MODEL
+    });
 
     queryString = queryResponse.toString();
 
@@ -270,11 +291,17 @@ const ArthasGPT = async config => {
       }
 
       try {
-        const { response: textModelResponse } = await chatAgent.chat({
-          message
+        const { message: textModelResponse } = await chatAgent.chat({
+          model: LANGUAGE_MODEL,
+          messages: [
+            {
+              role: 'user',
+              content: message
+            }
+          ]
         });
 
-        messageResponse = textModelResponse;
+        messageResponse = textModelResponse?.content;
 
         remember(queryString, messageResponse);
       } catch (error) {
@@ -308,7 +335,14 @@ const ArthasGPT = async config => {
   let imgResponse;
 
   const invokeImageAgent = async () => {
-    const imageAgent = new OpenAI();
+    // TODO: No image model support in
+    // ollama yet
+
+    const imageAgent = {
+      images: {
+        generate: () => {}
+      }
+    };
 
     const imgCache = recall(messageResponse);
 
@@ -428,6 +462,10 @@ const ArthasGPT = async config => {
     if (!imgResponse) {
       if (isVerbose && artStyle) {
         log(imageModelError);
+      }
+
+      if (messageResponse) {
+        console.log(`%c${messageResponse}`, 'color: dodgerblue');
       }
 
       return {

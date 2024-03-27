@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const readline = require('readline');
-const { OpenAIAgent } = require('llamaindex');
+const { Ollama } = require('llamaindex');
 
 // Storage utils
 
@@ -26,6 +26,7 @@ const {
   GOODBYE,
   BYE,
   EXIT,
+  LANGUAGE_MODEL,
   languageModel,
   textModelLogPrefix,
   waiting
@@ -89,6 +90,12 @@ const ArthasGPTCommandLine = async config => {
   // Prompt user
 
   const promptUser = async input => {
+    if (!input || input.length < 3) {
+      ui.question(placeholder, promptUser);
+
+      return;
+    }
+
     const inputLowerCase = input.toLowerCase();
 
     if (inputLowerCase === BYE || inputLowerCase === EXIT) {
@@ -96,7 +103,9 @@ const ArthasGPTCommandLine = async config => {
       process.exit();
     }
 
-    const chatAgent = new OpenAIAgent({});
+    const chatAgent = new Ollama({
+      model: LANGUAGE_MODEL
+    });
 
     // Create prompt transforming the user input into the third-person
 
@@ -116,11 +125,17 @@ const ArthasGPTCommandLine = async config => {
         log(`${textModelLogPrefix} ${message}`);
       }
 
-      const { response: textModelResponse } = await chatAgent.chat({
-        message
+      const { message: textModelResponse } = await chatAgent.chat({
+        model: LANGUAGE_MODEL,
+        messages: [
+          {
+            role: 'user',
+            content: message
+          }
+        ]
       });
 
-      messageResponse = textModelResponse;
+      messageResponse = textModelResponse?.content;
 
       remember(input, messageResponse);
 
