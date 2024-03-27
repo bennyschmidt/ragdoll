@@ -10,7 +10,7 @@
 
 - **Distinct Personalities**: Answers to questions are always rephrased from the first-person perspective in the style of a persona that you define. Because you're asked to define things like prose, tone, and even art style, Arthas is able to generate the appropriate prompts for your persona, resulting in statements the target persona would perceivably say.
 
-- **Extensible**: Arthas can be ran [as an API](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-api), in [a React app](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-react), as [a CLI](https://github.com/bennyschmidt/ArthasGPT/blob/master/src/index.js), or as a [a dependency](https://www.npmjs.com/package/arthasgpt) in your application. It defaults to GPT 3.5 for text and DALL-E 2 for images, but you can define your own models too ("bring your own models").
+- **Extensible**: Arthas can be ran [as an API](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-api), in [a React app](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-react), as [a CLI](https://github.com/bennyschmidt/ArthasGPT/blob/master/src/index.js), or as a [a dependency](https://www.npmjs.com/package/arthasgpt) in your application. It uses [Ollama](https://github.com/run-llama/LlamaIndexTS/blob/main/packages/core/src/llm/ollama.ts) for text so you can choose from a [wide range of models](https://ollama.com/library), and defaults to [Stable Diffusion](https://github.com/AUTOMATIC1111/stable-diffusion-webui) (txt2img) for images.
 
 -----
 
@@ -22,7 +22,7 @@ You can interact with ArthasGPT via this [Node/React full stack application](htt
 
 ## CLI examples
 
-#### Image quality & GUI
+### Image quality & GUI
 
 Note that in a default Terminal you will not see text colors and the image quality will be diminished. Using a Terminal like [iTerm2](https://iterm2.com) or [Kitty](https://sw.kovidgoyal.net/kitty) will allow you to view the full resolution (1024x1024 by default).
 
@@ -53,16 +53,12 @@ _In verbose mode with caching:_
 _In verbose mode when he doesn't know the answer based on the knowledge he has:_
 
 > Question: what is your favorite memory
->
-> Answer:
->
-> https://github.com/bennyschmidt/ArthasGPT/assets/45407493/16ac6fe8-686e-4d57-b949-2f0dad05dbe4
 
-Note that LLM query could not find any relevant info, resulting in this prompt fragment:
+For this one, llamaindex could not find any relevant info, resulting in this prompt fragment:
 
 > "Arthas's favorite memory is not explicitly mentioned in the context information provided."
 
-Yet the GPT-3.5 prompt is still robust enough to provide a meaningful response in the style of Arthas:
+Yet the prompt is still robust enough to provide a meaningful response in the style of Arthas:
 
 > "In the realm of my existence, a cherished memory lies concealed, veiled by the shadows of time. Its essence, though unspoken, resonates within my being. A tale of valor and darkness, woven intricately in the tapestry of my soul."
 
@@ -72,83 +68,76 @@ And we still get a relevant image:
 
 -----
 
-## Custom personas
-
-Want to go beyond Arthas? You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
-
-See [personas.md](./personas.md).
-
------
-
 ## Usage
 
-Set up the environment.
+Set up the environment. No API keys needed!
 
-#### .env scaffold
+### .env scaffold
 
 ```
-OPENAI_API_KEY=
 LLM_FRAMEWORK=llamaindex
-TEXT_MODEL=GPT-3.5
-IMAGE_MODEL=dall-e-2
-DELAY=2000
-VERBOSE=false
+TEXT_MODEL=mistral
+STABLE_DIFFUSION_URI=http://127.0.0.1:7860
+IMAGE_MODEL=txt2img
+DELAY=200
+RENDER=true
+VERBOSE=true
+GREETING=false
 CACHE=true
 MAX_STORAGE_KEY_LENGTH=32
 LOG_PREFIX=<ArthasGPT>
 STORAGE_URI=./.tmp
 ```
 
-#### Important environment variables
+-----
 
-`OPENAI_API_KEY`
+### Install Ollama
 
-Your OpenAI API key.
+1. Download Ollama
+   
+  **Linux**: `curl -fsSL https://ollama.com/install.sh | sh`
 
-`TEXT_MODEL`
+  **Windows & Mac**: [ollama.com/download](https://ollama.com/download)
 
-Example: `GPT-3.5`.
+2. Run the CLI
 
-`IMAGE_MODEL`
+  `ollama start`
 
-Example: `dall-e-2`.
+3. Find a model you like [here](https://ollama.com/library) and run it in your Terminal:
 
-`DELAY`
+  `ollama run mistral`
 
-Delay between requests (in ms), for rate limiting, artificial delays, etc.
+The Ollama (Mistral) API is now listening on `http://localhost:11434/`
 
-`VERBOSE`
+-----
 
-Set to `true` to show all logs. Enable `VERBOSE` to see the generated prompts in your console, for example, in this case the query was `"how many blood elves have you killed?"`:
+### Install Stable Diffusion
 
-```
-<ArthasGPT> Text (GPT-3.5) Prompt: Re-write the following message in the first-person, as if you are Arthas, in a style that is inspiring but grim, from the year 1200 A.D., using as few characters as possible (never exceed 500), in a tone that is slightly resentful, omitting any references to Earth or real-world society: Arthas killed Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, who were blood elves. So, Arthas has killed three blood elves.
-<ArthasGPT> Text (GPT-3.5) responded with "I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.".
-<ArthasGPT> Waiting 2 seconds...
-<ArthasGPT> Image (dall-e-2) Prompt: Render the following in the style of Blizzard's World of Warcraft concept art in high resolution like a finely-tuned video game model including each detail and anatomically correct features (if any): I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.
-```
+1. Have *Python 3* already installed
 
-`CACHE`
+2. Navigate to the desired directory and
 
-Set to `true` to cache LLM inputs & queries, and GPT/DALL-E prompts, responses, & images.
+  `git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git`
 
-Caching is highly recommended because OpenAI is expensive and heavily rate limited. Right now, a question can cost up to 4 cents in OpenAI. Keep in mind the underlying LLM framework ([llamaindex](https://github.com/run-llama/LlamaIndexTS)) might perform several OpenAI calls even though in this application only 1 is being made, especially with embeddings and considering every question requires at least 2 GPT-3.5 calls and 1 DALL-E call.
+3. Run the web UI
 
-![312222034-eaad93a1-f28d-454a-9fa5-33ceac658806](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/ca6bedaf-2d30-4fa6-b5e1-0484a0cffbdc)
+  **Linux & Mac**: Run `./webui.sh --api --lowvram`. 
 
-Here is my usage after running the above examples, note how much more expensive images and embeddings are than GPT by itself.
+  **Windows**: Run `./webui-user.bat --api --lowvram` from Windows Explorer as normal, non-administrator, user.
 
-The transformed input/prompt is what's cached, not the literal user input. For example, the questions "who are you", "explain who you are", and "who is arthas?" all transform to the same query ("Who is Arthas?"). The GPT and DALL-E responses are cached too, so you'll get the same answer when asking similar questions (but without having to hit OpenAI again).
+  Note: `--lowvram` is an optional flag, if running on a great machine (16GB+ vram) you can omit this.
 
-`MAX_STORAGE_KEY_LENGTH`
+The Stable Diffusion API is now listening on `http://localhost:7860/`
 
-How long storage keys can be. The keys are derived from queries/prompts, but there are key/value limits in `localStorage` and some prompts can be very long. An alternative to this config would be to make the developer provide a `key` (similar to React) each time `remember` is called, but that isn't supported right now.
+-----
 
-`STORAGE_URI`
+### Run Arthas
 
-Path to a temp folder used for cache (default is `./.tmp`).
+`npm start`
 
-#### Persona configuration
+-----
+
+### Persona configuration
 
 Pass this config object to `ArthasGPT` when you instantiate a new persona.
 
@@ -166,16 +155,61 @@ const agent = await ArthasGPT({
 
 ```
 
-#### Run
+-----
 
-`npm start`
+## Custom personas
+
+Want to go beyond Arthas? You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
+
+See [personas.md](./personas.md).
+
+-----
+
+## Environment config
+
+`TEXT_MODEL`
+
+Example: `mistral`.
+
+`STABLE_DIFFUSION_URI`
+
+Example: `http://127.0.0.1:7860`.
+
+`DELAY`
+
+Delay between requests (in ms), for rate limiting, artificial delays, etc.
+
+`VERBOSE`
+
+Set to `true` to show all logs. Enable `VERBOSE` to see the generated prompts in your console, for example, in this case the query was `"how many blood elves have you killed?"`:
+
+```
+<ArthasGPT> Text (mistral) Prompt: Re-write the following message in the first-person, as if you are Arthas, in a style that is inspiring but grim, from the year 1200 A.D., using as few characters as possible (never exceed 500), in a tone that is slightly resentful, omitting any references to Earth or real-world society: Arthas killed Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, who were blood elves. So, Arthas has killed three blood elves.
+<ArthasGPT> Text (mistral) responded with "I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.".
+<ArthasGPT> Waiting 2 seconds...
+<ArthasGPT> Image (txt2img) Prompt: Render the following in the style of Blizzard's World of Warcraft concept art in high resolution like a finely-tuned video game model including each detail and anatomically correct features (if any): I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.
+```
+
+`CACHE`
+
+Set to `true` to cache inputs, llamaindex queries, LLM prompts, responses, & images.
+
+The transformed input/prompt is what's cached, not the literal user input. For example, the questions "who are you", "explain who you are", and "who is arthas?" all transform to the same query ("Who is Arthas?"). The LLM responses are cached too, so you'll get the same answer when asking similar questions (but without having to request the LLM again).
+
+`MAX_STORAGE_KEY_LENGTH`
+
+How long storage keys can be. The keys are derived from queries/prompts, but there are key/value limits in `localStorage` and some prompts can be very long. An alternative to this config would be to make the developer provide a `key` (similar to React) each time `remember` is called, but that isn't supported right now.
+
+`STORAGE_URI`
+
+Path to a temp folder used for cache (default is `./.tmp`).
+
+-----
 
 ## Middleware
 
 To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
-  1. LLM query: Run the formatted prompt through another transformer (instead of GPT 3.5)
-  2. Transformed response: Run the final image prompt through a different image model (instead of DALL-E 2)
+  1. LLM query: Run the formatted prompt through another transformer (like GPT 4)
+  2. Transformed response: Run the final image prompt through a different image model (like DALL-E 3)
 
 _Instructions coming soon._
-
-See this [this issue](https://github.com/bennyschmidt/ArthasGPT/issues/1) for more info.
