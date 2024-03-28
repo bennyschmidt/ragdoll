@@ -137,6 +137,8 @@ The Stable Diffusion API is now listening on `http://localhost:7860`
 
 `npm start`
 
+The Arthas API is now listening on `http://localhost:8000`
+
 -----
 
 ### Important environment variables
