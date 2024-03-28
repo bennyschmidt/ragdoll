@@ -246,8 +246,8 @@ You'll often need an API key to use the following models.
 
 #### Text-to-text models
 
-- OpenAI GPT-3.5 Turbo
-- Anthropic Claude 3 (Opus, Sonnet, and Haiku) and the legacy models (Claude 2 and Instant)
+- OpenAI GPT-3.5 Turbo & GPT 4
+- Anthropic Claude Instant, Claude 2, & Claude 3 (Opus, Sonnet, & Haiku)
 - Groq LLMs
 
 *Middleware option planned.*
