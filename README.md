@@ -18,7 +18,7 @@ Bring your RAG applications to life with characters that have distinct knowledge
 
 ## Web app
 
-You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
+You can interact with ArthasGPT using this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
 
 -----
 
@@ -26,7 +26,7 @@ You can interact with ArthasGPT via this [Node/React full stack application](htt
 
 ### Image quality & GUI
 
-Note that in a default Terminal you will not see text colors and the image quality will be diminished. Using a Terminal like [iTerm2](https://iterm2.com) or [Kitty](https://sw.kovidgoyal.net/kitty) will allow you to view the full resolution (1024x1024 by default).
+Note that in a default Terminal you will not see text colors and the image quality will be diminished. Using a Terminal like [iTerm2](https://iterm2.com) or [Kitty](https://sw.kovidgoyal.net/kitty) will allow you to view the full resolution.
 
 _In native Terminal with no addons:_
 
@@ -79,7 +79,7 @@ Set up the environment. No API keys needed!
 ```
 LLM_FRAMEWORK=llamaindex
 TEXT_MODEL=mistral
-STABLE_DIFFUSION_URI=http://127.0.0.1:7860
+STABLE_DIFFUSION_URI=http://localhost:7860
 IMAGE_MODEL=txt2img
 DELAY=200
 RENDER=true
@@ -109,7 +109,7 @@ STORAGE_URI=./.tmp
 
   `ollama run mistral`
 
-The Ollama (Mistral) API is now listening on `http://localhost:11434/`
+The Ollama (Mistral) API is now listening on `http://localhost:11434`
 
 -----
 
@@ -129,7 +129,7 @@ The Ollama (Mistral) API is now listening on `http://localhost:11434/`
 
   Note: `--lowvram` is an optional flag, if running on a great machine (16GB+ vram) you can omit this.
 
-The Stable Diffusion API is now listening on `http://localhost:7860/`
+The Stable Diffusion API is now listening on `http://localhost:7860`
 
 -----
 
@@ -139,43 +139,15 @@ The Stable Diffusion API is now listening on `http://localhost:7860/`
 
 -----
 
-### Persona configuration
-
-Pass this config object to `ArthasGPT` when you instantiate a new persona.
-
-```
-const agent = await ArthasGPT({
-  cache,
-  greeting,
-  knowledgeURI,
-  name,
-  artStyle,
-  writingStyle,
-  writingTone,
-  query
-});
-
-```
-
------
-
-## Custom personas
-
-Want to go beyond Arthas? You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
-
-See [personas.md](./personas.md).
-
------
-
-## Environment config
+### Important environment variables
 
 `TEXT_MODEL`
 
-Example: `mistral`.
+The name of the text-to-text model you want to use (this should be running on `http://localhost:11434`). Example: `mistral`.
 
 `STABLE_DIFFUSION_URI`
 
-Example: `http://127.0.0.1:7860`.
+The base path for Stable Diffusion requests. Example: `http://localhost:7860`.
 
 `DELAY`
 
@@ -205,6 +177,109 @@ How long storage keys can be. The keys are derived from queries/prompts, but the
 `STORAGE_URI`
 
 Path to a temp folder used for cache (default is `./.tmp`).
+
+-----
+
+### Persona configuration
+
+Pass this config object to `ArthasGPT` when you instantiate a new persona.
+
+```
+const agent = await ArthasGPT({
+  cache,
+  greeting,
+  knowledgeURI,
+  name,
+  artStyle,
+  writingStyle,
+  writingTone,
+  query
+});
+
+```
+
+-----
+
+### Custom personas
+
+Want to go beyond Arthas? You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
+
+See [personas.md](./personas.md).
+
+-----
+
+### Model support: Running your own
+
+#### Text-to-text models
+
+- Llama2 Chat LLMs (70B, 13B, and 7B parameters)
+- MistralAI Chat LLMs
+- Fireworks Chat LLMs
+
+#### Text-to-image models
+
+- Stable Diffusion txt2img
+  
+#### Text-to-audio models
+
+*Support planned for text-to-speech, text-to-music, and text-to-sfx models.*
+
+#### Text-to-video models
+
+*Support planned for text-to-animation, text-to-cgi, and text-to-film models.*
+
+#### Text-to-code models
+
+*Support planned for a text-to-code model.*
+
+#### Text-to-moderation models
+
+*Support planned for a text-to-moderation model*
+
+-----
+
+### Model support: Using providers
+
+You'll often need an API key to use the following models.
+
+#### Text-to-text models
+
+- OpenAI GPT-3.5 Turbo
+- Anthropic Claude 3 (Opus, Sonnet, and Haiku) and the legacy models (Claude 2 and Instant)
+- Groq LLMs
+
+*Middleware option planned.*
+
+#### Text-to-image models
+
+- OpenAI DALL-E 2 & DALL-E 3
+- Leonardo.AI Kino XL
+
+*Middleware option planned.*
+
+#### Text-to-audio models
+
+- OpenAI TTS & Whisper
+
+*Middleware option planned.*
+
+#### Text-to-video models
+
+- OpenAI Sora
+
+*Middleware option planned.*
+
+#### Text-to-code models
+
+- OpenAI GPT-4
+
+*Middleware option planned.*
+
+#### Text-to-moderation models
+
+- OpenAI Moderation
+
+*Middleware option planned.*
 
 -----
 
