@@ -127,7 +127,7 @@ The Ollama (Mistral) API is now listening on `http://localhost:11434`
 
   **Windows**: Run `./webui-user.bat --api --lowvram` from Windows Explorer as normal, non-administrator, user.
 
-  Note: `--lowvram` is an optional flag, if running on a great machine (16GB+ vram) you can omit this.
+  Note: `--lowvram` is an optional flag, if running on a great machine (32GB+ vram) you can omit this.
 
 The Stable Diffusion API is now listening on `http://localhost:7860`
 
