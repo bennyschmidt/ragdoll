@@ -18,6 +18,14 @@ Bring your RAG applications to life with characters that have distinct knowledge
 
 -----
 
+### Retrieval-Augmented Generation
+
+Retrieval-Augmented Generation ([RAG](https://stackoverflow.blog/2023/10/18/retrieval-augmented-generation-keeping-llms-relevant-and-current/)) is a strategy that helps address both LLM hallucinations and out-of-date or off-topic training data. The following diagram shows how data flows into Ragdoll from documents (web pages) and LLM-generated content through an indexed store and query engine before being presented:
+
+![ragdoll](https://github.com/bennyschmidt/ragdoll-studio/assets/45407493/3794c846-69bd-48fc-82d6-fe9a6f6310eb)
+
+-----
+
 ## Web app
 
 You can interact with Ragdoll via this [Node/React full stack application](https://github.com/bennyschmidt/ragdoll-studio).
