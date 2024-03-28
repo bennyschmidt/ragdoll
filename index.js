@@ -1,5 +1,5 @@
 // Library export
 
-const { ArthasGPT } = require('./src/components/ArthasGPT.js');
+const { Ragdoll } = require('./src/components/Ragdoll.js');
 
-module.exports = ArthasGPT;
+module.exports = Ragdoll;

@@ -34,7 +34,7 @@ const {
 
 const { prefixInput } = require('../utils/prefix.js');
 
-const { ArthasGPT } = require('./ArthasGPT.js');
+const { Ragdoll } = require('./Ragdoll.js');
 
 dotenv.config();
 
@@ -42,16 +42,16 @@ const { DELAY } = process.env;
 
 /* * * * * * * * * * * * * * * * * * * *
  *                                     *
- * ArthasGPTCommandLine                *
+ * RagdollCommandLine                *
  *                                     *
  * Interface layer (based on readline) *
- * for ArthasGPT.                      *
+ * for Ragdoll.                      *
  *                                     *
  * * * * * * * * * * * * * * * * * * * */
 
 let agent;
 
-const ArthasGPTCommandLine = async config => {
+const RagdollCommandLine = async config => {
   const {
     greeting = false,
     name,
@@ -78,7 +78,7 @@ const ArthasGPTCommandLine = async config => {
       log(CREATING_AGENT);
     }
 
-    agent = await ArthasGPT({
+    agent = await Ragdoll({
       ...config,
 
       greeting,
@@ -154,7 +154,7 @@ const ArthasGPTCommandLine = async config => {
         log(CREATING_AGENT);
       }
 
-      agent = await ArthasGPT({
+      agent = await Ragdoll({
         ...config,
 
         greeting,
@@ -170,5 +170,5 @@ const ArthasGPTCommandLine = async config => {
 };
 
 module.exports = {
-  ArthasGPTCommandLine
+  RagdollCommandLine
 };

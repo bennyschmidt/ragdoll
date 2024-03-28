@@ -79,16 +79,16 @@ const {
 
 /* * * * * * * * * * * * * * * * * * * *
 *                                     *
-* ArthasGPT                           *
+* Ragdoll                           *
 *                                     *
 * Manages state of knowledge          *
 * and responses.                      *
 *                                     *
-* config: ArthasGPTConfig             *
+* config: RagdollConfig             *
 *                                     *
 * * * * * * * * * * * * * * * * * * * */
 
-const ArthasGPT = async config => {
+const Ragdoll = async config => {
   if (!config) {
     log(CONFIG_ERROR);
 
@@ -135,7 +135,7 @@ const ArthasGPT = async config => {
 
   // Prefix output prompt (text)
 
-  const arthasPromptPrefix = prefixOutputText(config);
+  const ragdollPromptPrefix = prefixOutputText(config);
 
   // Prefix output prompt (image)
 
@@ -274,7 +274,7 @@ const ArthasGPT = async config => {
 
     // Create prompt to answer in the defined style
 
-    message = `${arthasPromptPrefix} ${queryString}`;
+    message = `${ragdollPromptPrefix} ${queryString}`;
 
     const messageCache = recall(queryString);
 
@@ -432,7 +432,7 @@ const ArthasGPT = async config => {
    * chat                                *
    *                                     *
    * Pass additional queries to an       *
-   * instantiated Arthas.                *
+   * instantiated Ragdoll.               *
    *                                     *
    * input: string                       *
    *                                     *
@@ -569,5 +569,5 @@ const ArthasGPT = async config => {
 };
 
 module.exports = {
-  ArthasGPT
+  Ragdoll
 };

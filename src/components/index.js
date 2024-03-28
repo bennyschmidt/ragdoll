@@ -1,7 +1,7 @@
-const { ArthasGPT } = require('./ArthasGPT');
-const { ArthasGPTCommandLine } = require('./ArthasGPTCommandLine');
+const { Ragdoll } = require('./Ragdoll');
+const { RagdollCommandLine } = require('./RagdollCommandLine');
 
 module.exports = {
-  ArthasGPT,
-  ArthasGPTCommandLine
+  Ragdoll,
+  RagdollCommandLine
 };

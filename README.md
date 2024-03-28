@@ -1,22 +1,24 @@
-# ArthasGPT
+# Ragdoll
 
-![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
+![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ragdoll/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
+
+*Arthas Menethil, World of Warcraft*
 
 -----
 
 ## Benefits
 
-- **Scoped Knowledge**: Using a generic chatbot like ChatGPT for narrow use cases like customer support, a game NPC, or writing code can yield undesired responses, or provide information outside the intended scope of knowledge. You don't want your MMORPG shopkeeper talking about about Ford F-150s or Chick-Fil-A, do you? Arthas scrapes a URL you provide as a knowledge source (usually a Wiki style web page, but could be anything - it's very flexible), and uses [`llamaindex`](https://github.com/run-llama/LlamaIndexTS) to store and index that knowledge. It handles questions that fall outside of the scope of knowledge gracefully, so it will still feel like the user is interacting with a person even when it doesn't know the answer.
+- **Scoped Knowledge**: Using a generic chatbot like ChatGPT for narrow use cases like customer support, a game NPC, or writing code can yield undesired responses, or provide information outside the intended scope of knowledge. You don't want your MMORPG shopkeeper talking about about Ford F-150s or Chick-Fil-A, do you? Ragdoll scrapes a URL you provide as a knowledge source (usually a Wiki style web page, but could be anything - it's very flexible), and uses [`llamaindex`](https://github.com/run-llama/LlamaIndexTS) to store and index that knowledge. It handles questions that fall outside of the scope of knowledge gracefully, so it will still feel like the user is interacting with a person even when it doesn't know the answer.
 
-- **Distinct Personalities**: Answers to questions are always rephrased from the first-person perspective in the style of a persona that you define. Because you're asked to define things like prose, tone, and even art style, Arthas is able to generate the appropriate prompts for your persona, resulting in statements the target persona would perceivably say.
+- **Distinct Personalities**: Answers to questions are always rephrased from the first-person perspective in the style of a persona that you define. Because you're asked to define things like prose, tone, and even art style, Ragdoll is able to generate the appropriate prompts for your persona, resulting in statements the target persona would perceivably say.
 
-- **Extensible**: Arthas can be ran [as an API](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-api), in [a React app](https://github.com/bennyschmidt/Arthas.AI/tree/master/arthas-react), as [a CLI](https://github.com/bennyschmidt/ArthasGPT/blob/master/src/index.js), or as a [a dependency](https://www.npmjs.com/package/arthasgpt) in your application. It uses [Ollama](https://github.com/run-llama/LlamaIndexTS/blob/main/packages/core/src/llm/ollama.ts) for text so you can choose from a [wide range of models](https://ollama.com/library), and defaults to [Stable Diffusion](https://github.com/AUTOMATIC1111/stable-diffusion-webui) (txt2img) for images.
+- **Extensible**: Ragdoll can be ran [as an API](https://github.com/bennyschmidt/ragdoll-studio/tree/master/ragdoll-api), in [a React app](https://github.com/bennyschmidt/ragdoll-studio/tree/master/ragdoll-react), as [a CLI](https://github.com/bennyschmidt/ragdoll/blob/master/src/index.js), or as a [a dependency](https://www.npmjs.com/package/@bennyschmidt/ragdoll) in your application. It uses [Ollama](https://github.com/run-llama/LlamaIndexTS/blob/main/packages/core/src/llm/ollama.ts) for text so you can choose from a [wide range of models](https://ollama.com/library), and defaults to [Stable Diffusion](https://github.com/AUTOMATIC1111/stable-diffusion-webui) (txt2img) for images.
 
 -----
 
 ## Web app
 
-You can interact with ArthasGPT via this [Node/React full stack application](https://github.com/bennyschmidt/Arthas.AI).
+You can interact with Ragdoll via this [Node/React full stack application](https://github.com/bennyschmidt/ragdoll-studio).
 
 -----
 
@@ -32,7 +34,7 @@ _In native Terminal with no addons:_
 >
 > Answer:
 >
-> ![312186339-4cc0aa1c-1592-425c-9ed3-59a5605d705b](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/89a4858b-2b70-4ab1-bfca-92da2039d20b)
+> ![312186339-4cc0aa1c-1592-425c-9ed3-59a5605d705b](https://github.com/bennyschmidt/ragdoll/assets/45407493/89a4858b-2b70-4ab1-bfca-92da2039d20b)
 
 _With high-res image support:_
 
@@ -40,7 +42,7 @@ _With high-res image support:_
 >
 > Answer:
 >
-> ![312185744-a3c7634b-94d5-4d12-9dd6-3d748670f2d3](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/4f723771-e0c3-4825-a8ea-674a7dbbff4c)
+> ![312185744-a3c7634b-94d5-4d12-9dd6-3d748670f2d3](https://github.com/bennyschmidt/ragdoll/assets/45407493/4f723771-e0c3-4825-a8ea-674a7dbbff4c)
 
 _In verbose mode with caching:_
 
@@ -48,7 +50,7 @@ _In verbose mode with caching:_
 >
 > Answer:
 >
-> ![312192889-97a1dbc1-0669-4f43-8067-34cc99938449](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/eb226377-f63b-40b0-b258-d00a12af46c8)
+> ![312192889-97a1dbc1-0669-4f43-8067-34cc99938449](https://github.com/bennyschmidt/ragdoll/assets/45407493/eb226377-f63b-40b0-b258-d00a12af46c8)
 
 _In verbose mode when he doesn't know the answer based on the knowledge he has:_
 
@@ -64,7 +66,7 @@ Yet the prompt is still robust enough to provide a meaningful response in the st
 
 And we still get a relevant image:
 
-> ![312196072-f0304218-366f-43a9-8208-77543e486781](https://github.com/bennyschmidt/ArthasGPT/assets/45407493/6b348768-4f6a-4505-a360-d74e2c4f0154)
+> ![312196072-f0304218-366f-43a9-8208-77543e486781](https://github.com/bennyschmidt/ragdoll/assets/45407493/6b348768-4f6a-4505-a360-d74e2c4f0154)
 
 -----
 
@@ -85,7 +87,7 @@ VERBOSE=true
 GREETING=false
 CACHE=true
 MAX_STORAGE_KEY_LENGTH=32
-LOG_PREFIX=<ArthasGPT>
+LOG_PREFIX=<Ragdoll>
 STORAGE_URI=./.tmp
 ```
 
@@ -94,7 +96,7 @@ STORAGE_URI=./.tmp
 ### Install Ollama
 
 1. Download Ollama
-   
+
   **Linux**: `curl -fsSL https://ollama.com/install.sh | sh`
 
   **Windows & Mac**: [ollama.com/download](https://ollama.com/download)
@@ -121,7 +123,7 @@ The Ollama (Mistral) API is now listening on `http://localhost:11434/`
 
 3. Run the web UI
 
-  **Linux & Mac**: Run `./webui.sh --api --lowvram`. 
+  **Linux & Mac**: Run `./webui.sh --api --lowvram`.
 
   **Windows**: Run `./webui-user.bat --api --lowvram` from Windows Explorer as normal, non-administrator, user.
 
@@ -131,7 +133,7 @@ The Stable Diffusion API is now listening on `http://localhost:7860/`
 
 -----
 
-### Run Arthas
+### Run Ragdoll
 
 `npm start`
 
@@ -139,10 +141,10 @@ The Stable Diffusion API is now listening on `http://localhost:7860/`
 
 ### Persona configuration
 
-Pass this config object to `ArthasGPT` when you instantiate a new persona.
+Pass this config object to `Ragdoll` when you instantiate a new persona.
 
 ```
-const agent = await ArthasGPT({
+const agent = await Ragdoll({
   cache,
   greeting,
   knowledgeURI,
@@ -159,7 +161,7 @@ const agent = await ArthasGPT({
 
 ## Custom personas
 
-Want to go beyond Arthas? You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
+You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
 
 See [personas.md](./personas.md).
 
@@ -184,10 +186,10 @@ Delay between requests (in ms), for rate limiting, artificial delays, etc.
 Set to `true` to show all logs. Enable `VERBOSE` to see the generated prompts in your console, for example, in this case the query was `"how many blood elves have you killed?"`:
 
 ```
-<ArthasGPT> Text (mistral) Prompt: Re-write the following message in the first-person, as if you are Arthas, in a style that is inspiring but grim, from the year 1200 A.D., using as few characters as possible (never exceed 500), in a tone that is slightly resentful, omitting any references to Earth or real-world society: Arthas killed Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, who were blood elves. So, Arthas has killed three blood elves.
-<ArthasGPT> Text (mistral) responded with "I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.".
-<ArthasGPT> Waiting 2 seconds...
-<ArthasGPT> Image (txt2img) Prompt: Render the following in the style of Blizzard's World of Warcraft concept art in high resolution like a finely-tuned video game model including each detail and anatomically correct features (if any): I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.
+<Ragdoll> Text (mistral) Prompt: Re-write the following message in the first-person, as if you are Arthas, in a style that is inspiring but grim, from the year 1200 A.D., using as few characters as possible (never exceed 500), in a tone that is slightly resentful, omitting any references to Earth or real-world society: Arthas killed Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, who were blood elves. So, Arthas has killed three blood elves.
+<Ragdoll> Text (mistral) responded with "I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.".
+<Ragdoll> Waiting 2 seconds...
+<Ragdoll> Image (txt2img) Prompt: Render the following in the style of Blizzard's World of Warcraft concept art in high resolution like a finely-tuned video game model including each detail and anatomically correct features (if any): I, Arthas, vanquished Sylvanas Windrunner, King Anasterian Sunstrider, and Dar'Khan Drathir, noble blood elves. Three lives claimed by my hand.
 ```
 
 `CACHE`

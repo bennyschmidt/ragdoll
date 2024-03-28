@@ -8,9 +8,9 @@ const {
   DEFAULT_WRITING_STYLE
 } = require('./utils/strings');
 
-const { ArthasGPTCommandLine } = require('./components/ArthasGPTCommandLine');
+const { RagdollCommandLine } = require('./components/RagdollCommandLine');
 
-ArthasGPTCommandLine({
+RagdollCommandLine({
   cache: true,
   greeting: false,
   knowledgeURI: DEFAULT_KNOWLEDGE_URI,
