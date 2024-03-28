@@ -1,7 +1,7 @@
 # Ragdoll
 
-Bring software to life with characters that have distinct knowledge and personalities.
-
+Create domain-specific personas and interact with them directly or in your application.
+ 
 ![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ragdoll/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
 
 *Arthas Menethil, World of Warcraft*
