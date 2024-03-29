@@ -149,7 +149,7 @@ The Stable Diffusion API is now listening on `http://localhost:7860/`
 
 `npm start`
 
-Ragdoll API is now listening on `http://localhost:8000/`
+Ragdoll is now running in your terminal.
 
 -----
 
