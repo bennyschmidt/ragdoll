@@ -1,6 +1,8 @@
 # Custom personas
 
-If we try to use real people or even fictional characters played by real people, we hit some OpenAI guardrails as you can see below, and can get some less-than-ideal responses. It seems best to use entirely fictional characters and content, and provide as much `knowledge` as possible (Wiki style pages work well).
+If you try to use real people or even fictional characters played by real people, you might hit some security guardrails, as you can see below, using GPT-3.5 Turbo for text and DALL-E 2 for images. In these cases, we can get some less-than-ideal end answers. So it seems best to use entirely fictional characters and content, and provide as much `knowledge` as possible (Wiki style pages work well). 
+
+It also helps to ensure the `name` is mentioned thoroughly in the knowledge source so the persona can identify with the right perspectives.
 
 Let's try a few!
 
@@ -133,7 +135,7 @@ _Link in the Dark World, standing in front of Ganon's pyramid, holding a swor.. 
 
 #### Bonus: Integrating with [Leonardo SDK](https://github.com/Leonardo-Interactive/leonardo-ts-sdk) to get amazing images
 
-In this example, we're [running middleware](https://github.com/bennyschmidt/ragdoll/blob/master/README.md#middleware) at the 2nd stage, diverting the prompt to Leonardo.Ai's ultra fine-tuned model Leonardo Kino XL, instead of the more generic DALL-E 2.
+This example opts for [middleware](https://github.com/bennyschmidt/ragdoll/blob/master/README.md#middleware) at the 2nd stage, diverting the prompt to Leonardo.Ai's ultra fine-tuned model Leonardo Kino XL, instead of the more generic DALL-E 2.
 
 ![312284048-f4d6068c-c906-4fcd-befa-050aff326d23](https://github.com/bennyschmidt/ragdoll/assets/45407493/5ae4f580-e896-43a8-bc73-4a8854c978cc)
 ![312284047-33b8b572-1041-4d2b-aeb7-6582583e1e9b](https://github.com/bennyschmidt/ragdoll/assets/45407493/d3cd2215-2e91-4429-a349-6da841ce93d6)
