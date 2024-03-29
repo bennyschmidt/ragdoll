@@ -38,7 +38,7 @@ You can interact with Ragdoll via this [Node/React full stack application](https
 
 ### Image quality & GUI
 
-Note that in a default Terminal you will not see text colors and the image quality will be diminished. Using a Terminal like [iTerm2](https://iterm2.com) or [Kitty](https://sw.kovidgoyal.net/kitty) will allow you to view the full resolution (1024x1024 by default).
+Note that in a default Terminal you will not see text colors and the image quality will be diminished. Using a Terminal like [iTerm2](https://iterm2.com) or [Kitty](https://sw.kovidgoyal.net/kitty) will allow you to view the full resolution (512x512 by default).
 
 _In native Terminal with no addons:_
 
@@ -91,7 +91,7 @@ Set up the environment. No API keys needed!
 ```
 LLM_FRAMEWORK=llamaindex
 TEXT_MODEL=mistral
-STABLE_DIFFUSION_URI=http://127.0.0.1:7860
+STABLE_DIFFUSION_URI=http://localhost:7860
 IMAGE_MODEL=txt2img
 DELAY=200
 RENDER=true
@@ -161,7 +161,7 @@ The name of the text-to-text model you want to use (this should be running on `h
 
 `STABLE_DIFFUSION_URI`
 
-Example: `http://127.0.0.1:7860`.
+Example: `http://localhost:7860`.
 
 `DELAY`
 
