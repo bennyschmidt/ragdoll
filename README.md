@@ -1,6 +1,8 @@
 # Ragdoll
 
-Create RAG software rich with characters that have distinct knowledge and personalities.
+The library for creating rich LLM-based RAG apps. 
+
+Deploy AI personas for a variety of [use cases](https://github.com/bennyschmidt/ragdoll-studio/blob/master/CaseStudies.md), each with their own distinct knowledge and style.
  
 ![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ragdoll/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
 
@@ -151,39 +153,11 @@ Ragdoll API is now listening on `http://localhost:8000/`
 
 -----
 
-### Persona configuration
-
-Pass this config object to `Ragdoll` when you instantiate a new persona.
-
-```
-const agent = await Ragdoll({
-  cache,
-  greeting,
-  knowledgeURI,
-  name,
-  artStyle,
-  writingStyle,
-  writingTone,
-  query
-});
-
-```
-
------
-
-## Custom personas
-
-You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
-
-See [personas.md](./personas.md).
-
------
-
-## Environment config
+## Important environment variables
 
 `TEXT_MODEL`
 
-Example: `mistral`.
+The name of the text-to-text model you want to use (this should be running on `http://localhost:11434`). Example: `mistral`.
 
 `STABLE_DIFFUSION_URI`
 
@@ -217,6 +191,113 @@ How long storage keys can be. The keys are derived from queries/prompts, but the
 `STORAGE_URI`
 
 Path to a temp folder used for cache (default is `./.tmp`).
+
+-----
+
+### Persona configuration
+
+Pass this config object to `Ragdoll` when you instantiate a new persona.
+
+```javascript
+const myPersona = await Ragdoll({
+  cache,
+  greeting,
+  knowledgeURI,
+  name,
+  artStyle,
+  writingStyle,
+  writingTone,
+  query
+});
+
+// If there's a greeting or initial query
+// an answer is already available
+
+const { text: textAnswer } = myPersona.answer;
+
+console.log(textAnswer);
+
+// Now you can chat freely using
+// the `chat` method
+
+const { text: textAnswer2 } = await myPersona.chat('who are you?');
+
+console.log(textAnswer2);
+
+```
+
+-----
+
+## Custom personas
+
+You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
+
+See [personas.md](./personas.md).
+
+-----
+
+### Model support: Running your own
+
+#### Text-to-text models
+
+- Llama2 Chat LLMs (70B, 13B, and 7B parameters)
+- MistralAI Chat LLMs
+- Fireworks Chat LLMs
+
+#### Text-to-image models
+
+- Stable Diffusion txt2img
+  
+#### Text-to-audio models
+
+*Support planned for text-to-speech, text-to-music, and text-to-sfx models.*
+
+#### Text-to-video models
+
+*Support planned for text-to-animation, text-to-cgi, and text-to-film models.*
+
+#### Text-to-code models
+
+*Support planned for a text-to-code model.*
+
+-----
+
+### Model support: Using providers
+
+You'll often need an API key to use the following models.
+
+#### Text-to-text models
+
+- OpenAI GPT-3.5 Turbo & GPT 4
+- Anthropic Claude Instant, Claude 2, & Claude 3 (Opus, Sonnet, & Haiku)
+- Groq LLMs
+
+*Middleware option planned.*
+
+#### Text-to-image models
+
+- OpenAI DALL-E 2 & DALL-E 3
+- Leonardo.AI Kino XL
+
+*Middleware option planned.*
+
+#### Text-to-audio models
+
+- OpenAI TTS & Whisper
+
+*Middleware option planned.*
+
+#### Text-to-video models
+
+- OpenAI Sora
+
+*Middleware option planned.*
+
+#### Text-to-code models
+
+- OpenAI GPT-4
+
+*Middleware option planned.*
 
 -----
 
