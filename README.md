@@ -22,7 +22,7 @@ Deploy AI personas for a variety of [use cases](https://github.com/bennyschmidt/
 
 ### Retrieval-Augmented Generation
 
-Retrieval-Augmented Generation ([RAG](https://stackoverflow.blog/2023/10/18/retrieval-augmented-generation-keeping-llms-relevant-and-current/)) is a strategy that helps address both LLM hallucinations and out-of-date or off-topic training data. The following diagram shows how data flows into Ragdoll from documents (web pages) and LLM-generated content through an indexed store and query engine before being presented:
+Retrieval-Augmented Generation ([RAG](https://arxiv.org/pdf/2005.11401.pdf)) is a strategy that helps address both LLM hallucinations and out-of-date or off-topic training data. The following diagram shows how data flows into Ragdoll from documents (web pages) and LLM-generated content through an indexed store and query engine before being presented:
 
 ![diagram](https://github.com/bennyschmidt/ragdoll/assets/45407493/6e730da7-8708-4f20-b4c1-3e7eecdf5061)
 
