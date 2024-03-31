@@ -42,6 +42,16 @@ const DEFAULT_ART_STYLE = `Blizzard's World of Warcraft concept art in high reso
 const DEFAULT_WRITING_STYLE = 'inspiring but grim, like from the dark ages, excluding asterisk-based interjections like "*sigh*"';
 const DEFAULT_WRITING_TONE = 'slightly annoyed';
 
+// Extend the scope of knowledge.
+// This can affect the time it takes to
+// create the vector store
+
+const DEFAULT_ADDITIONAL_KNOWLEDGE_URIS = [
+  // 'https://wowwiki-archive.fandom.com/wiki/Arthas:_Rise_of_the_Lich_King',
+  // 'https://cableplugger.wordpress.com/wp-content/uploads/2010/11/world-of-warcraft-2009-arthas-rise-of-the-lich-king-christie-golden.pdf',
+  // 'https://www.reddit.com/r/wow/comments/7guydb/lore_post_the_tragedy_of_arthas_menethil/'
+];
+
 const INVALID = 'Missing/invalid';
 const CONFIG_ERROR = `${INVALID} configuration.`;
 const CONFIG_ERROR_KNOWLEDGE_URI = `${INVALID} knowledge URI.`;
@@ -67,6 +77,7 @@ module.exports = {
   DEFAULT_ART_STYLE,
   DEFAULT_WRITING_TONE,
   DEFAULT_WRITING_STYLE,
+  DEFAULT_ADDITIONAL_KNOWLEDGE_URIS,
   STARTING,
   DONE,
   DEFAULT_ANSWER,

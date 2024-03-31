@@ -99,6 +99,7 @@ const Ragdoll = async config => {
     cache = true,
     greeting = false,
     knowledgeURI = DEFAULT_KNOWLEDGE_URI,
+    additionalKnowledgeURIs = [],
     name = DEFAULT_NAME,
     artStyle = '',
     writingStyle = DEFAULT_WRITING_STYLE,
@@ -548,9 +549,40 @@ const Ragdoll = async config => {
 
       answer = await respond(null, knowledgeCache);
     } else {
-      const { error, text } = await extractFromURL(knowledgeURI);
+      log(`Extracting from ${knowledgeURI}...`);
 
-      await createIndex(text);
+      let { error, text } = await extractFromURL(knowledgeURI);
+
+      if (!error) {
+        log('Done.');
+
+        const additionalKnowledgeSources = additionalKnowledgeURIs?.length;
+
+        if (additionalKnowledgeSources) {
+          log(`Additional knowledge provided. Extracting...`);
+
+          for (const uri of additionalKnowledgeURIs) {
+            log(`${uri} (${additionalKnowledgeURIs.indexOf(uri) + 1} / ${additionalKnowledgeSources})...`);
+
+            const {
+              error: textractError,
+              text: textractText
+            } = await extractFromURL(uri);
+
+            if (textractError) {
+              error = textractError;
+
+              break;
+            }
+
+            text += `\n\n${textractText}`;
+          }
+
+          log('Done.');
+        }
+
+        await createIndex(text);
+      }
 
       answer = await respond(error, text);
     }

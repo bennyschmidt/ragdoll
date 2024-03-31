@@ -159,7 +159,7 @@ const RagdollCommandLine = async config => {
 
         greeting,
         query: messageResponse,
-        cache: true
+        cache: false
       });
     }
 
