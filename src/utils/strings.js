@@ -38,8 +38,8 @@ const imageModelError = `${imageModel} failed to return an image. This could be 
 
 const DEFAULT_NAME = 'Arthas';
 const DEFAULT_KNOWLEDGE_URI = 'https://wowpedia.fandom.com/wiki/Arthas_Menethil';
-const DEFAULT_ART_STYLE = `Blizzard's World of Warcraft concept art in high resolution like a fine-tuned video game model including each detail and anatomically correct features (if any)`;
-const DEFAULT_WRITING_STYLE = 'inspiring but grim, like from the dark ages, excluding asterisk-based interjections like "*sigh*"';
+const DEFAULT_ART_STYLE = 'World of Warcraft concept art';
+const DEFAULT_WRITING_STYLE = 'inspiring but grim, like from the dark ages"';
 const DEFAULT_WRITING_TONE = 'slightly annoyed';
 
 // Extend the scope of knowledge.
