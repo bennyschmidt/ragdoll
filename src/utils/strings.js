@@ -3,9 +3,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const {
-  LLM_FRAMEWORK,
-  TEXT_MODEL,
-  IMAGE_MODEL,
+  TEXT_MODEL_PROVIDER,
+  TEXT_TEXT_MODEL,
+  IMAGE_IMAGE_MODEL,
   DELAY
 } = process.env;
 
@@ -27,11 +27,11 @@ const GOODBYE = 'Farewell.';
 const BYE = 'bye';
 const EXIT = 'exit';
 
-const llmFramework = `LLM (${LLM_FRAMEWORK})`;
+const llmFramework = `LLM provider (${TEXT_MODEL_PROVIDER})`;
 const llmLogPrefix = `${llmFramework} query:`;
-const textModel = `Text model (${TEXT_MODEL})`;
+const textModel = `Text model (${TEXT_TEXT_MODEL})`;
 const textModelLogPrefix = `${textModel} prompt:`;
-const imageModel = `Image model (${IMAGE_MODEL})`;
+const imageModel = `Image model (${IMAGE_IMAGE_MODEL})`;
 const imageModelLogPrefix = `${imageModel} prompt:`;
 const waiting = `Waiting ${DELAY / 1000} seconds...`;
 const imageModelError = `${imageModel} failed to return an image. This could be due to a safety violation, rate limiting, or a network issue.`;
@@ -39,18 +39,14 @@ const imageModelError = `${imageModel} failed to return an image. This could be 
 const DEFAULT_NAME = 'Arthas';
 const DEFAULT_KNOWLEDGE_URI = 'https://wowpedia.fandom.com/wiki/Arthas_Menethil';
 const DEFAULT_ART_STYLE = 'World of Warcraft concept art';
-const DEFAULT_WRITING_STYLE = 'inspiring but grim, like from the dark ages"';
+const DEFAULT_WRITING_STYLE = 'inspiring but grim, like from the dark ages';
 const DEFAULT_WRITING_TONE = 'slightly annoyed';
 
-// Extend the scope of knowledge.
-// This can affect the time it takes to
-// create the vector store
+// Extend the scope of knowledge by adding
+// URLs. This can extend the time it takes
+// to create the vector store
 
-const DEFAULT_ADDITIONAL_KNOWLEDGE_URIS = [
-  // 'https://wowwiki-archive.fandom.com/wiki/Arthas:_Rise_of_the_Lich_King',
-  // 'https://cableplugger.wordpress.com/wp-content/uploads/2010/11/world-of-warcraft-2009-arthas-rise-of-the-lich-king-christie-golden.pdf',
-  // 'https://www.reddit.com/r/wow/comments/7guydb/lore_post_the_tragedy_of_arthas_menethil/'
-];
+const DEFAULT_ADDITIONAL_KNOWLEDGE_URIS = [];
 
 const INVALID = 'Missing/invalid';
 const CONFIG_ERROR = `${INVALID} configuration.`;
@@ -91,7 +87,7 @@ module.exports = {
   CONFIG_ERROR_ART_STYLE,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
-  TEXT_MODEL,
+  TEXT_TEXT_MODEL,
   llmFramework,
   llmLogPrefix,
   textModel,

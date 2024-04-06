@@ -53,7 +53,7 @@ const {
   CONFIG_ERROR_NAME,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
-  TEXT_MODEL,
+  TEXT_TEXT_MODEL,
   llmLogPrefix,
   textModel,
   textModelLogPrefix,
@@ -73,7 +73,11 @@ const {
 dotenv.config();
 
 const {
-  STABLE_DIFFUSION_URI,
+  IMAGE_MODEL_URI,
+  IMAGE_CFG_SCALE,
+  IMAGE_DENOISING_STRENGTH,
+  IMAGE_CFG_SCALE_TRUE,
+  IMAGE_DENOISING_STRENGTH_TRUE,
   DELAY
 } = process.env;
 
@@ -103,7 +107,8 @@ const Ragdoll = async config => {
     name = DEFAULT_NAME,
     artStyle = '',
     writingStyle = DEFAULT_WRITING_STYLE,
-    query
+    query,
+    imageSrc = ''
   } = config;
 
   if (!knowledgeURI) {
@@ -186,10 +191,10 @@ const Ragdoll = async config => {
       {
         serviceContext: {
           llm: new Ollama({
-            model: TEXT_MODEL
+            model: TEXT_TEXT_MODEL
           }),
           embedModel: new OllamaEmbedding({
-            model: TEXT_MODEL
+            model: TEXT_TEXT_MODEL
           }),
           promptHelper: new PromptHelper(),
           nodeParser: new SimpleNodeParser(),
@@ -268,7 +273,7 @@ const Ragdoll = async config => {
 
   const invokeChatAgent = async () => {
     const chatAgent = new Ollama({
-      model: TEXT_MODEL
+      model: TEXT_TEXT_MODEL
     });
 
     queryString = queryResponse.toString();
@@ -292,7 +297,7 @@ const Ragdoll = async config => {
 
       try {
         const { message: textModelResponse } = await chatAgent.chat({
-          model: TEXT_MODEL,
+          model: TEXT_TEXT_MODEL,
           messages: [
             {
               role: 'user',
@@ -334,7 +339,7 @@ const Ragdoll = async config => {
 
   let imgResponse;
 
-  const invokeImageAgent = async () => {
+  const invokeImageAgent = async ({ src }) => {
     const imgCache = recall(messageResponse);
 
     if (imgCache) {
@@ -350,8 +355,10 @@ const Ragdoll = async config => {
         log(`${imageModelLogPrefix} ${imageModelPrompt}`);
       }
 
+      const endpoint = src ? 'img2img' : 'txt2img';
+
       try {
-        const imageModelResponse = await fetch(`${STABLE_DIFFUSION_URI}/sdapi/v1/txt2img`, {
+        const imageModelResponse = await fetch(`${IMAGE_MODEL_URI}/sdapi/v1/${endpoint}`, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -360,7 +367,13 @@ const Ragdoll = async config => {
           body: JSON.stringify({
             prompt: imageModelPrompt,
             width: IMAGE_SIZE,
-            height: IMAGE_SIZE
+            height: IMAGE_SIZE,
+            // cfgScale: IMAGE_CFG_SCALE,
+            // denoisingStrength: IMAGE_DENOISING_STRENGTH,
+            cfgScale: IMAGE_CFG_SCALE_TRUE,
+            denoisingStrength: IMAGE_DENOISING_STRENGTH_TRUE,
+
+            ...(src ? { initImages: [src] } : {})
           })
         });
 
@@ -368,13 +381,11 @@ const Ragdoll = async config => {
           const result = await imageModelResponse.json();
 
           if (result?.images) {
-            const base64URL = `data:image/png;base64,${result.images.shift()}`;
+            const base64 = `data:image/png;base64,${result.images.shift()}`;
 
-            imgResponse = base64URL;
+            imgResponse = base64;
           }
         }
-
-        console.log('imgResponse', imgResponse);
 
         remember(messageResponse, imgResponse);
       } catch (error) {
@@ -419,10 +430,16 @@ const Ragdoll = async config => {
 
     await createQuery();
 
-    await invokeChatAgent();
+    if (imageSrc) {
+      messageResponse = '';
+    } else {
+      await invokeChatAgent();
+    }
 
     if (artStyle) {
-      await invokeImageAgent();
+      await invokeImageAgent({
+        src: imageSrc
+      });
     }
 
     return render();

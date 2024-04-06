@@ -1,9 +1,9 @@
 # Ragdoll
 
-The library for creating rich LLM-based RAG apps. 
+The library for creating rich LLM-based RAG apps.
 
 Deploy AI personas for a variety of [use cases](https://github.com/bennyschmidt/ragdoll-studio/blob/master/CaseStudies.md), each with their own distinct knowledge and style.
- 
+
 ![311941658-6b93b041-f30f-4121-a951-a746a19c75fc](https://github.com/bennyschmidt/ragdoll/assets/45407493/05231ee1-9a40-436f-88a1-dd5b5ec73a1a)
 
 *Arthas Menethil, World of Warcraft*
@@ -89,10 +89,12 @@ Set up the environment. No API keys needed!
 ### .env scaffold
 
 ```
-LLM_FRAMEWORK=llamaindex
-TEXT_MODEL=mistral
-STABLE_DIFFUSION_URI=http://localhost:7860
-IMAGE_MODEL=txt2img
+TEXT_MODEL_PROVIDER=LlamaIndex
+TEXT_MODEL_URI=http://localhost:11434
+TEXT_TEXT_MODEL=mistral
+IMAGE_MODEL_PROVIDER=Stable Diffusion
+IMAGE_MODEL_URI=http://localhost:7860
+IMAGE_IMAGE_MODEL=txt2img
 DELAY=200
 RENDER=true
 VERBOSE=true
@@ -155,11 +157,11 @@ Ragdoll is now running in your terminal.
 
 ## Important environment variables
 
-`TEXT_MODEL`
+`TEXT_TEXT_MODEL`
 
 The name of the text-to-text model you want to use (this should be running on `http://localhost:11434`). Example: `mistral`.
 
-`STABLE_DIFFUSION_URI`
+`IMAGE_MODEL_URI`
 
 Example: `http://localhost:7860`.
 
@@ -247,7 +249,7 @@ See [personas.md](./personas.md).
 #### Text-to-image models
 
 - Stable Diffusion txt2img
-  
+
 #### Text-to-audio models
 
 *Support planned for text-to-speech, text-to-music, and text-to-sfx models.*

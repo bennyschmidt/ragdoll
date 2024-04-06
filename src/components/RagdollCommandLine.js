@@ -26,7 +26,7 @@ const {
   GOODBYE,
   BYE,
   EXIT,
-  TEXT_MODEL,
+  TEXT_TEXT_MODEL,
   textModel,
   textModelLogPrefix,
   waiting
@@ -104,7 +104,7 @@ const RagdollCommandLine = async config => {
     }
 
     const chatAgent = new Ollama({
-      model: TEXT_MODEL
+      model: TEXT_TEXT_MODEL
     });
 
     // Create prompt transforming the user input into the third-person
@@ -126,7 +126,7 @@ const RagdollCommandLine = async config => {
       }
 
       const { message: textModelResponse } = await chatAgent.chat({
-        model: TEXT_MODEL,
+        model: TEXT_TEXT_MODEL,
         messages: [
           {
             role: 'user',
