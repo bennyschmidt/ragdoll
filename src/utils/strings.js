@@ -5,7 +5,7 @@ dotenv.config();
 const {
   TEXT_MODEL_PROVIDER,
   TEXT_TEXT_MODEL,
-  IMAGE_IMAGE_MODEL,
+  TEXT_IMAGE_MODEL,
   DELAY
 } = process.env;
 
@@ -29,12 +29,12 @@ const EXIT = 'exit';
 
 const llmFramework = `LLM provider (${TEXT_MODEL_PROVIDER})`;
 const llmLogPrefix = `${llmFramework} query:`;
-const textModel = `Text model (${TEXT_TEXT_MODEL})`;
-const textModelLogPrefix = `${textModel} prompt:`;
-const imageModel = `Image model (${IMAGE_IMAGE_MODEL})`;
-const imageModelLogPrefix = `${imageModel} prompt:`;
+const textTextModel = `Text-to-text model (${TEXT_TEXT_MODEL})`;
+const textModelLogPrefix = `${textTextModel} prompt:`;
+const textImageModel = `Text-to-image model (${TEXT_IMAGE_MODEL})`;
+const imageModelLogPrefix = `${textImageModel} prompt:`;
 const waiting = `Waiting ${DELAY / 1000} seconds...`;
-const imageModelError = `${imageModel} failed to return an image. This could be due to a safety violation, rate limiting, or a network issue.`;
+const imageModelError = `${textImageModel} failed to return an image. This could be due to a safety violation, rate limiting, or a network issue.`;
 
 const DEFAULT_NAME = 'Arthas';
 const DEFAULT_KNOWLEDGE_URI = 'https://wowpedia.fandom.com/wiki/Arthas_Menethil';
@@ -90,9 +90,9 @@ module.exports = {
   TEXT_TEXT_MODEL,
   llmFramework,
   llmLogPrefix,
-  textModel,
+  textTextModel,
   textModelLogPrefix,
-  imageModel,
+  textImageModel,
   imageModelLogPrefix,
   imageModelError,
   waiting

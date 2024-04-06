@@ -27,7 +27,7 @@ const {
   BYE,
   EXIT,
   TEXT_TEXT_MODEL,
-  textModel,
+  textTextModel,
   textModelLogPrefix,
   waiting
 } = require('../utils/strings.js');
@@ -140,7 +140,7 @@ const RagdollCommandLine = async config => {
       remember(input, messageResponse);
 
       if (isVerbose) {
-        log(`${textModel} responded with "${messageResponse}".`);
+        log(`${textTextModel} responded with "${messageResponse}".`);
         log(waiting);
       }
 

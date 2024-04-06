@@ -55,9 +55,9 @@ const {
   CONFIG_ERROR_QUERY,
   TEXT_TEXT_MODEL,
   llmLogPrefix,
-  textModel,
+  textTextModel,
   textModelLogPrefix,
-  imageModel,
+  textImageModel,
   imageModelLogPrefix,
   imageModelError,
   waiting
@@ -310,12 +310,12 @@ const Ragdoll = async config => {
 
         remember(queryString, messageResponse);
       } catch (error) {
-        log(`${textModel} error: ${error?.message}`);
+        log(`${textTextModel} error: ${error?.message}`);
         messageResponse = error?.message;
       }
 
       if (isVerbose) {
-        log(`${textModel} responded with "${messageResponse}".`);
+        log(`${textTextModel} responded with "${messageResponse}".`);
         log(waiting);
       }
 
@@ -389,7 +389,7 @@ const Ragdoll = async config => {
 
         remember(messageResponse, imgResponse);
       } catch (error) {
-        log(`${imageModel} error: ${error?.message}`);
+        log(`${textImageModel} error: ${error?.message}`);
         imgResponse = null;
       }
 
