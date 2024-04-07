@@ -57,8 +57,6 @@ const {
   llmLogPrefix,
   textTextModel,
   textModelLogPrefix,
-  textImageModel,
-  imageModelLogPrefix,
   imageModelError,
   waiting
 } = require('../utils/strings.js');
@@ -340,6 +338,7 @@ const Ragdoll = async config => {
   let imgResponse;
 
   const invokeImageAgent = async ({ src }) => {
+    const endpoint = src ? 'img2img' : 'txt2img';
     const imgCache = recall(messageResponse);
 
     if (imgCache) {
@@ -349,13 +348,11 @@ const Ragdoll = async config => {
 
       imgResponse = imgCache;
     } else {
-      const imageModelPrompt = `${imagePromptPrefix} ${messageResponse}`;
+      const imageModelPrompt = `${imagePromptPrefix} ${messageResponse || query}`;
 
       if (isVerbose) {
-        log(`${imageModelLogPrefix} ${imageModelPrompt}`);
+        log(`${endpoint} ${imageModelPrompt}`);
       }
-
-      const endpoint = src ? 'img2img' : 'txt2img';
 
       try {
         const imageModelResponse = await fetch(`${IMAGE_MODEL_URI}/sdapi/v1/${endpoint}`, {
@@ -389,12 +386,12 @@ const Ragdoll = async config => {
 
         remember(messageResponse, imgResponse);
       } catch (error) {
-        log(`${textImageModel} error: ${error?.message}`);
+        log(`${endpoint} error: ${error?.message}`);
         imgResponse = null;
       }
 
       if (isVerbose) {
-        log(`${imageModelLogPrefix} responded with "${imgResponse}".`);
+        log(`${endpoint} responded with "${imgResponse}".`);
       }
     }
   };
@@ -428,11 +425,11 @@ const Ragdoll = async config => {
 
     // Create and render the response
 
-    await createQuery();
-
     if (imageSrc) {
       messageResponse = '';
     } else {
+      await createQuery();
+
       await invokeChatAgent();
     }
 

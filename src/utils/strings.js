@@ -6,6 +6,7 @@ const {
   TEXT_MODEL_PROVIDER,
   TEXT_TEXT_MODEL,
   TEXT_IMAGE_MODEL,
+  IMAGE_MODEL_PROVIDER,
   DELAY
 } = process.env;
 
@@ -34,7 +35,7 @@ const textModelLogPrefix = `${textTextModel} prompt:`;
 const textImageModel = `Text-to-image model (${TEXT_IMAGE_MODEL})`;
 const imageModelLogPrefix = `${textImageModel} prompt:`;
 const waiting = `Waiting ${DELAY / 1000} seconds...`;
-const imageModelError = `${textImageModel} failed to return an image. This could be due to a safety violation, rate limiting, or a network issue.`;
+const imageModelError = `${IMAGE_MODEL_PROVIDER} failed to return an image. This could be due to a safety violation, rate limiting, or a network issue.`;
 
 const DEFAULT_NAME = 'Arthas';
 const DEFAULT_KNOWLEDGE_URI = 'https://wowpedia.fandom.com/wiki/Arthas_Menethil';
