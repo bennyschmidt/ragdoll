@@ -362,15 +362,21 @@ const Ragdoll = async config => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            prompt: imageModelPrompt,
-            width: IMAGE_SIZE,
-            height: IMAGE_SIZE,
-            // cfgScale: IMAGE_CFG_SCALE,
-            // denoisingStrength: IMAGE_DENOISING_STRENGTH,
-            cfgScale: IMAGE_CFG_SCALE_TRUE,
-            denoisingStrength: IMAGE_DENOISING_STRENGTH_TRUE,
+            "prompt": imageModelPrompt,
+            "width": IMAGE_SIZE,
+            "height": IMAGE_SIZE,
+            "batch_size": 1,
+            "n_iter": 1,
+            // cfg_scale: IMAGE_CFG_SCALE,
+            // denoising_strength: IMAGE_DENOISING_STRENGTH,
+            "cfg_scale": parseFloat(IMAGE_CFG_SCALE_TRUE),
+            "denoising_strength": parseFloat(IMAGE_DENOISING_STRENGTH_TRUE),
+            "include_init_images": true,
+            "script_args": [],
+            "send_images": true,
+            "alwayson_scripts": {},
 
-            ...(src ? { initImages: [src] } : {})
+            ...(src ? { "init_images": [src] } : {})
           })
         });
 
