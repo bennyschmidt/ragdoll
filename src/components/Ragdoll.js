@@ -394,7 +394,7 @@ const Ragdoll = async config => {
       imgResponse2 = null;
     }
 
-    if (isVerbose) {
+    if (isVerbose && imgResponse) {
       log(`${endpoint} responded with "${imgResponse.slice(0, 64)}..."${imgResponse2 ? ` and ${imgResponse2.slice(0, 64)}...` : ''}.`);
     }
   };
