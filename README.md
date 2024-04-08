@@ -1,6 +1,6 @@
 # Ragdoll
 
-The library for creating rich LLM-based RAG apps.
+The library for character-driven AI experiences.
 
 Deploy AI personas for a variety of [use cases](https://github.com/bennyschmidt/ragdoll-studio/blob/master/CaseStudies.md), each with their own distinct knowledge and style.
 
