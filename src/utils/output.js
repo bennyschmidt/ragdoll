@@ -5,7 +5,8 @@ dotenv.config();
 const {
   VERBOSE,
   RENDER,
-  LOG_PREFIX
+  LOG_PREFIX,
+  IMAGE_BATCH_SIZE
 } = process.env;
 
 // Some models have specific size requirements
@@ -46,6 +47,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 module.exports = {
   IMAGE_SIZE,
   IMAGE_QUALITY,
+  IMAGE_BATCH_SIZE,
   isRendered,
   isVerbose,
   log,
