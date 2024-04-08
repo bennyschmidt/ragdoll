@@ -23,6 +23,7 @@ const {
 
 const {
   IMAGE_SIZE,
+  IMAGE_BATCH_SIZE,
   isRendered,
   isVerbose,
   log,
@@ -36,7 +37,6 @@ const { extractFromURL } = require('../utils/extraction.js');
 const {
   LOADED_CACHED_QUERY,
   LOADED_CACHED_TEXT_RESPONSE,
-  LOADED_CACHED_IMAGE_RESPONSE,
   LOADED_CACHED_KNOWLEDGE,
   CACHE_CLEARED,
   PREPARING_RESPONSE,
@@ -336,69 +336,66 @@ const Ragdoll = async config => {
   // Create prompt to render an image in the defined style
 
   let imgResponse;
+  let imgResponse2;
 
   const invokeImageAgent = async ({ src }) => {
     const endpoint = src ? 'img2img' : 'txt2img';
-    const imgCache = recall(messageResponse);
 
-    if (imgCache) {
-      if (isVerbose) {
-        log(LOADED_CACHED_IMAGE_RESPONSE);
-      }
+    const imageModelPrompt = `${imagePromptPrefix} ${messageResponse || query}`;
 
-      imgResponse = imgCache;
-    } else {
-      const imageModelPrompt = `${imagePromptPrefix} ${messageResponse || query}`;
+    if (isVerbose) {
+      log(`${endpoint} ${imageModelPrompt}`);
+    }
 
-      if (isVerbose) {
-        log(`${endpoint} ${imageModelPrompt}`);
-      }
+    try {
+      const imageModelResponse = await fetch(`${IMAGE_MODEL_URI}/sdapi/v1/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "prompt": imageModelPrompt,
+          "width": IMAGE_SIZE,
+          "height": IMAGE_SIZE,
+          "batch_size": IMAGE_BATCH_SIZE,
+          "n_iter": 1,
+          // cfg_scale: IMAGE_CFG_SCALE,
+          // denoising_strength: IMAGE_DENOISING_STRENGTH,
+          "cfg_scale": parseFloat(IMAGE_CFG_SCALE_TRUE),
+          "denoising_strength": parseFloat(IMAGE_DENOISING_STRENGTH_TRUE),
+          "include_init_images": true,
+          "script_args": [],
+          "send_images": true,
+          "alwayson_scripts": {},
 
-      try {
-        const imageModelResponse = await fetch(`${IMAGE_MODEL_URI}/sdapi/v1/${endpoint}`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            "prompt": imageModelPrompt,
-            "width": IMAGE_SIZE,
-            "height": IMAGE_SIZE,
-            "batch_size": 1,
-            "n_iter": 1,
-            // cfg_scale: IMAGE_CFG_SCALE,
-            // denoising_strength: IMAGE_DENOISING_STRENGTH,
-            "cfg_scale": parseFloat(IMAGE_CFG_SCALE_TRUE),
-            "denoising_strength": parseFloat(IMAGE_DENOISING_STRENGTH_TRUE),
-            "include_init_images": true,
-            "script_args": [],
-            "send_images": true,
-            "alwayson_scripts": {},
+          ...(src ? { "init_images": [src] } : {})
+        })
+      });
 
-            ...(src ? { "init_images": [src] } : {})
-          })
-        });
+      if (imageModelResponse?.ok) {
+        const result = await imageModelResponse.json();
 
-        if (imageModelResponse?.ok) {
-          const result = await imageModelResponse.json();
-
-          if (result?.images) {
-            const base64 = `data:image/png;base64,${result.images.shift()}`;
-
-            imgResponse = base64;
-          }
+        if (result?.images) {
+          imgResponse = `data:image/png;base64,${result.images[0]}`;
         }
 
-        remember(messageResponse, imgResponse);
-      } catch (error) {
-        log(`${endpoint} error: ${error?.message}`);
-        imgResponse = null;
-      }
+        // Assuming batch size is fixed
+        // at 2 for now
 
-      if (isVerbose) {
-        log(`${endpoint} responded with "${imgResponse}".`);
+        if (src) {
+          imgResponse2 = `data:image/png;base64,${result.images[1]}`;
+        }
       }
+    } catch (error) {
+      log(`${endpoint} error: ${error?.message}`);
+
+      imgResponse = null;
+      imgResponse2 = null;
+    }
+
+    if (isVerbose) {
+      log(`${endpoint} responded with "${imgResponse.slice(0, 64)}..."${imgResponse2 ? ` and ${imgResponse2.slice(0, 64)}...` : ''}.`);
     }
   };
 
@@ -512,6 +509,7 @@ const Ragdoll = async config => {
     if (!isRendered) {
       return {
         imageURL: imgResponse,
+        imageURL2: imgResponse2,
         text: messageResponse
       };
     }
@@ -531,6 +529,7 @@ const Ragdoll = async config => {
     return {
       image: displayImage,
       imageURL: imgResponse,
+      imageURL2: imgResponse2,
       text: messageResponse
     };
   };
