@@ -143,7 +143,7 @@ The Ollama (Mistral) API is now listening on `http://localhost:11434/`
 
 3. Run the web UI
 
-  **Linux & Mac**: Run `./webui.sh --api --lowvram`.
+  **Linux & Mac**: Run `./webui.sh --api --xformers --lowvram`.
 
   **Windows**: Run `./webui-user.bat --api --lowvram` from Windows Explorer as normal, non-administrator, user.
 
@@ -236,15 +236,7 @@ console.log(textAnswer2);
 
 -----
 
-## Custom personas
-
-You can create a custom persona for just about anyone as long as there's an online knowledgebase to point to.
-
-See [personas.md](./personas.md).
-
------
-
-### Model support: Running your own
+### Model support: Local LLMs that run on your machine
 
 #### Text-to-text models
 
@@ -256,63 +248,26 @@ See [personas.md](./personas.md).
 
 - Stable Diffusion txt2img
 
-#### Text-to-audio models
+#### Image-to-image models
 
-*Support planned for text-to-speech, text-to-music, and text-to-sfx models.*
+- Stable Diffusion img2img
 
-#### Text-to-video models
+#### Image-to-video models
 
-*Support planned for text-to-animation, text-to-cgi, and text-to-film models.*
+*Support planned for image-to-animation, image-to-cgi, and image-to-film models.*
+
+#### Audio-to-audio models
+
+*Support planned for audio-to-music and audio-to-sfx models.*
 
 #### Text-to-code models
 
 *Support planned for a text-to-code model.*
 
------
-
-### Model support: Using providers
-
-You'll often need an API key to use the following models.
-
-#### Text-to-text models
-
-- OpenAI GPT-3.5 Turbo & GPT 4
-- Anthropic Claude Instant, Claude 2, & Claude 3 (Opus, Sonnet, & Haiku)
-- Groq LLMs
-
-*Middleware option planned.*
-
-#### Text-to-image models
-
-- OpenAI DALL-E 2 & DALL-E 3
-- Leonardo.AI Kino XL
-
-*Middleware option planned.*
-
-#### Text-to-audio models
-
-- OpenAI TTS & Whisper
-
-*Middleware option planned.*
-
-#### Text-to-video models
-
-- OpenAI Sora
-
-*Middleware option planned.*
-
-#### Text-to-code models
-
-- OpenAI GPT-4
-
-*Middleware option planned.*
-
------
-
 ## Middleware
 
 To ensure integrity, optionally integrate lifecycle middleware at 2 stages:
-  1. LLM query: Run the formatted prompt through another transformer (like GPT 4)
-  2. Transformed response: Run the final image prompt through a different image model (like DALL-E 3)
+  1. LLM query: Run the formatted prompt through another transformer (like OpenAI GPT-4)
+  2. Transformed response: Run the final image prompt through a different image model (like Leonardo Kino XL)
 
 _Instructions coming soon._
