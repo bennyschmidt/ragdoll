@@ -48,15 +48,7 @@ _In native Terminal with no addons:_
 >
 > ![312186339-4cc0aa1c-1592-425c-9ed3-59a5605d705b](https://github.com/bennyschmidt/ragdoll/assets/45407493/89a4858b-2b70-4ab1-bfca-92da2039d20b)
 
-_With high-res image support:_
-
-> Question: "what happened between you and sylvanas?"
->
-> Answer:
->
-> ![312185744-a3c7634b-94d5-4d12-9dd6-3d748670f2d3](https://github.com/bennyschmidt/ragdoll/assets/45407493/4f723771-e0c3-4825-a8ea-674a7dbbff4c)
-
-_In verbose mode with caching:_
+_In verbose mode with caching, and high-res image support:_
 
 > Question: "why are you so mean"
 >
