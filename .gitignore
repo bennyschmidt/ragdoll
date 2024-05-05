@@ -1,6 +1,7 @@
 # directories
 /node_modules
 /.tmp
+/src/models/gguf
 
 # env
 .env

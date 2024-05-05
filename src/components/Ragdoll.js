@@ -4,12 +4,17 @@ const dotenv = require('dotenv');
 const {
   Document,
   VectorStoreIndex,
-  OllamaEmbedding,
-  Ollama,
+  HuggingFaceEmbedding,
   PromptHelper,
   SimpleNodeParser,
-  CallbackManager
+  CallbackManager,
+  ResponseSynthesizer,
+  getResponseBuilder
 } = require('llamaindex');
+
+const {
+  HuggingFaceEmbeddingModelType
+} = require('llamaindex/embeddings/HuggingFaceEmbedding');
 
 // Storage utils
 
@@ -53,7 +58,7 @@ const {
   CONFIG_ERROR_NAME,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
-  TEXT_TEXT_MODEL,
+  TEXT_MODEL_BATCH_SIZE,
   llmLogPrefix,
   textTextModel,
   textModelLogPrefix,
@@ -79,16 +84,45 @@ const {
   DELAY
 } = process.env;
 
+const modelPath = `${__dirname}/../models/gguf/mistral-7b-v0.1.Q4_0.gguf`;
+
+let model;
+let context;
+let session;
+
+let ChatSession = () => {};
+
+// Run LlamaCpp
+
+(async () => {
+  const {
+    LlamaModel,
+    LlamaContext,
+    LlamaChatSession
+  } = await import('node-llama-cpp');
+
+  model = new LlamaModel({
+    modelPath
+  });
+
+  context = new LlamaContext({
+    model,
+    batchSize: TEXT_MODEL_BATCH_SIZE
+  });
+
+  ChatSession = LlamaChatSession;
+})();
+
 /* * * * * * * * * * * * * * * * * * * *
-*                                     *
-* Ragdoll                           *
-*                                     *
-* Manages state of knowledge          *
-* and responses.                      *
-*                                     *
-* config: RagdollConfig             *
-*                                     *
-* * * * * * * * * * * * * * * * * * * */
+ *                                     *
+ * Ragdoll                             *
+ *                                     *
+ * Manages state of knowledge          *
+ * and responses.                      *
+ *                                     *
+ * config: RagdollConfig               *
+ *                                     *
+ * * * * * * * * * * * * * * * * * * * */
 
 const Ragdoll = async config => {
   if (!config) {
@@ -147,6 +181,11 @@ const Ragdoll = async config => {
 
   const { default: terminalImage } = await import('terminal-image');
 
+  session = new ChatSession({
+    context,
+    systemPrompt: ragdollPromptPrefix
+  });
+
   let queryResponse;
 
   // Clear cache
@@ -176,6 +215,28 @@ const Ragdoll = async config => {
   let queryEngine;
 
   const createIndex = async text => {
+    // Internal chat wrapper
+
+    const vectorChatSession = new ChatSession({
+      context
+    });
+
+    const chatWrapper = {
+      ...model,
+
+      complete: model.complete || (async ({ prompt }) => {
+        const text = await vectorChatSession.prompt(prompt);
+
+        return { text };
+      }),
+
+      chat: model.chat || (async ({ messages }) => {
+        const message = await vectorChatSession.prompt(messages[0].content);
+
+        return { message };
+      })
+    };
+
     // Create index and query engine
 
     const document = new Document({ text });
@@ -188,11 +249,9 @@ const Ragdoll = async config => {
       [document],
       {
         serviceContext: {
-          llm: new Ollama({
-            model: TEXT_TEXT_MODEL
-          }),
-          embedModel: new OllamaEmbedding({
-            model: TEXT_TEXT_MODEL
+          llm: chatWrapper,
+          embedModel: new HuggingFaceEmbedding({
+            modelType: HuggingFaceEmbeddingModelType.XENOVA_ALL_MPNET_BASE_V2
           }),
           promptHelper: new PromptHelper(),
           nodeParser: new SimpleNodeParser(),
@@ -212,7 +271,12 @@ const Ragdoll = async config => {
       log(CREATING_QUERY_ENGINE);
     }
 
-    queryEngine = index.asQueryEngine();
+    queryEngine = index.asQueryEngine({
+      responseSynthesizer: new ResponseSynthesizer({
+        serviceContext: index.serviceContext,
+        responseBuilder: getResponseBuilder(index.serviceContext, 'simple')
+      })
+    });
   };
 
   /* * * * * * * * * * * * * * * * * * * *
@@ -238,11 +302,13 @@ const Ragdoll = async config => {
         log(`${llmLogPrefix} ${query}`);
       }
 
-      const { response } = await queryEngine.query({
+      const queryEngineResponse = await queryEngine.query({
         query
       });
 
-      queryResponse = response;
+      const { response } = queryEngineResponse;
+
+      queryResponse = `${response}`;
 
       remember(query, queryResponse);
     }
@@ -270,10 +336,6 @@ const Ragdoll = async config => {
   let queryString;
 
   const invokeChatAgent = async () => {
-    const chatAgent = new Ollama({
-      model: TEXT_TEXT_MODEL
-    });
-
     queryString = queryResponse.toString();
 
     // Create prompt to answer in the defined style
@@ -287,24 +349,16 @@ const Ragdoll = async config => {
         log(LOADED_CACHED_TEXT_RESPONSE);
       }
 
-      messageResponse = messageCache;
+      messageResponse = `${messageCache}`;
     } else {
       if (isVerbose) {
         log(`${textModelLogPrefix} ${message}`);
       }
 
       try {
-        const { message: textModelResponse } = await chatAgent.chat({
-          model: TEXT_TEXT_MODEL,
-          messages: [
-            {
-              role: 'user',
-              content: message
-            }
-          ]
-        });
+        const textModelResponse = await session.prompt(message);
 
-        messageResponse = textModelResponse?.content;
+        messageResponse = `${textModelResponse}`;
 
         remember(queryString, messageResponse);
       } catch (error) {

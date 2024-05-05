@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const readline = require('readline');
-const { Ollama } = require('llamaindex');
+
+const modelPath = `${__dirname}/../models/gguf/mistral-7b-v0.1.Q4_0.gguf`;
 
 // Storage utils
 
@@ -26,7 +27,7 @@ const {
   GOODBYE,
   BYE,
   EXIT,
-  TEXT_TEXT_MODEL,
+  TEXT_MODEL_BATCH_SIZE,
   textTextModel,
   textModelLogPrefix,
   waiting
@@ -41,17 +42,23 @@ dotenv.config();
 const { DELAY } = process.env;
 
 /* * * * * * * * * * * * * * * * * * * *
- *                                     *
- * RagdollCommandLine                *
- *                                     *
- * Interface layer (based on readline) *
- * for Ragdoll.                      *
- *                                     *
- * * * * * * * * * * * * * * * * * * * */
+*                                     *
+* RagdollCommandLine                *
+*                                     *
+* Interface layer (based on readline) *
+* for Ragdoll.                      *
+*                                     *
+* * * * * * * * * * * * * * * * * * * */
 
 let agent;
 
 const RagdollCommandLine = async config => {
+  const {
+    LlamaModel,
+    LlamaContext,
+    LlamaChatSession
+  } = await import('node-llama-cpp');
+
   const {
     greeting = false,
     name,
@@ -65,6 +72,20 @@ const RagdollCommandLine = async config => {
   // Prefix input prompt
 
   const povPromptPrefix = prefixInput(config);
+
+  const model = new LlamaModel({
+    modelPath
+  });
+
+  const context = new LlamaContext({
+    model,
+    batchSize: TEXT_MODEL_BATCH_SIZE
+  });
+
+  const session = new LlamaChatSession({
+    context,
+    systemPrompt: povPromptPrefix
+  });
 
   const ui = readline.createInterface({
     input: process.stdin,
@@ -103,10 +124,6 @@ const RagdollCommandLine = async config => {
       process.exit();
     }
 
-    const chatAgent = new Ollama({
-      model: TEXT_TEXT_MODEL
-    });
-
     // Create prompt transforming the user input into the third-person
 
     let message = `${povPromptPrefix} ${input}`;
@@ -125,17 +142,9 @@ const RagdollCommandLine = async config => {
         log(`${textModelLogPrefix} ${message}`);
       }
 
-      const { message: textModelResponse } = await chatAgent.chat({
-        model: TEXT_TEXT_MODEL,
-        messages: [
-          {
-            role: 'user',
-            content: message
-          }
-        ]
-      });
+      const textModelResponse = await session.prompt(message);
 
-      messageResponse = textModelResponse?.content;
+      messageResponse = textModelResponse;
 
       remember(input, messageResponse);
 

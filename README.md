@@ -89,12 +89,12 @@ Set up the environment. No API keys needed!
 ### .env scaffold
 
 ```
-TEXT_MODEL_PROVIDER=LlamaIndex
-TEXT_MODEL_URI=http://localhost:11434
+RAG_ENGINE=LlamaIndex
 TEXT_TEXT_MODEL=mistral
+TEXT_IMAGE_MODEL=txt2img
+TEXT_MODEL_BATCH_SIZE=4096
 IMAGE_MODEL_PROVIDER=Stable Diffusion
 IMAGE_MODEL_URI=http://localhost:7860
-TEXT_IMAGE_MODEL=txt2img
 IMAGE_IMAGE_MODEL=img2img
 IMAGE_CFG_SCALE=8
 IMAGE_CFG_SCALE_TRUE=24
@@ -105,35 +105,16 @@ DELAY=200
 RENDER=true
 VERBOSE=true
 GREETING=false
-CACHE=true
+CACHE=false
 MAX_STORAGE_KEY_LENGTH=32
 LOG_PREFIX=<Ragdoll>
 STORAGE_URI=./.tmp
 ```
-
------
-
-### Install Ollama
-
-1. Download Ollama
-
-  **Linux**: `curl -fsSL https://ollama.com/install.sh | sh`
-
-  **Windows & Mac**: [ollama.com/download](https://ollama.com/download)
-
-2. Run the CLI
-
-  `ollama start`
-
-3. Find a model you like [here](https://ollama.com/library) and run it in your Terminal:
-
-  `ollama run mistral`
-
-The Ollama (Mistral) API is now listening on `http://localhost:11434/`
-
 -----
 
 ### Install Stable Diffusion
+
+For image support (optional).
 
 1. Have *Python 3* already installed
 
@@ -165,7 +146,7 @@ Ragdoll is now running in your terminal.
 
 `TEXT_TEXT_MODEL`
 
-The name of the text-to-text model you want to use (this should be running on `http://localhost:11434`). Example: `mistral`.
+The name of the text-to-text model you want to use. Example: `mistral`.
 
 `IMAGE_MODEL_URI`
 

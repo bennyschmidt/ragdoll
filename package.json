@@ -5,6 +5,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "llamaindex": "^0.2.3",
+    "node-llama-cpp": "^2.8.10",
     "node-localstorage": "^3.0.5",
     "terminal-image": "^2.0.0",
     "textract": "^2.5.0"

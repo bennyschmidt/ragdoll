@@ -3,9 +3,10 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const {
-  TEXT_MODEL_PROVIDER,
+  RAG_ENGINE,
   TEXT_TEXT_MODEL,
   TEXT_IMAGE_MODEL,
+  TEXT_MODEL_BATCH_SIZE,
   IMAGE_MODEL_PROVIDER,
   DELAY
 } = process.env;
@@ -28,8 +29,8 @@ const GOODBYE = 'Farewell.';
 const BYE = 'bye';
 const EXIT = 'exit';
 
-const llmFramework = `LLM provider (${TEXT_MODEL_PROVIDER})`;
-const llmLogPrefix = `${llmFramework} query:`;
+const ragEngine = `RAG engine (${RAG_ENGINE})`;
+const llmLogPrefix = `${ragEngine} query:`;
 const textTextModel = `Text-to-text model (${TEXT_TEXT_MODEL})`;
 const textModelLogPrefix = `${textTextModel} prompt:`;
 const textImageModel = `Text-to-image model (${TEXT_IMAGE_MODEL})`;
@@ -89,7 +90,8 @@ module.exports = {
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
   TEXT_TEXT_MODEL,
-  llmFramework,
+  TEXT_MODEL_BATCH_SIZE: TEXT_MODEL_BATCH_SIZE << 0,
+  ragEngine,
   llmLogPrefix,
   textTextModel,
   textModelLogPrefix,
