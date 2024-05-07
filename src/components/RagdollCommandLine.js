@@ -28,6 +28,7 @@ const {
   BYE,
   EXIT,
   LLAMACPP_BATCH_SIZE,
+  LLAMACPP_GPU_LAYERS,
   textTextModel,
   textModelLogPrefix,
   waiting
@@ -75,13 +76,13 @@ const RagdollCommandLine = async config => {
 
   const model = new LlamaModel({
     modelPath,
-    gpuLayers: 16
+    gpuLayers: LLAMACPP_GPU_LAYERS
   });
 
   const context = new LlamaContext({
     model,
     batchSize: LLAMACPP_BATCH_SIZE,
-    gpuLayers: 16
+    gpuLayers: LLAMACPP_GPU_LAYERS
   });
 
   const session = new LlamaChatSession({
@@ -144,7 +145,7 @@ const RagdollCommandLine = async config => {
         log(`${textModelLogPrefix} ${message}`);
       }
 
-      const textModelResponse = await session.prompt(message);
+      const textModelResponse = await session.prompt(message, { trimWhitespaceSuffix: true });
 
       messageResponse = textModelResponse;
 

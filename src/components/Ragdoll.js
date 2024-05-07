@@ -87,11 +87,13 @@ const {
 
 const modelPath = `${__dirname}/../models/gguf/mistral-7b-v0.1.Q4_0.gguf`;
 
+let Model = () => {};
+let Context = () => {};
+let ChatSession = () => {};
+
 let model;
 let context;
 let session;
-
-let ChatSession = () => {};
 
 // Run LlamaCpp
 
@@ -102,18 +104,20 @@ let ChatSession = () => {};
     LlamaChatSession
   } = await import('node-llama-cpp');
 
-  model = new LlamaModel({
+  Model = LlamaModel;
+  Context = LlamaContext;
+  ChatSession = LlamaChatSession;
+
+  model = new Model({
     modelPath,
     gpuLayers: LLAMACPP_GPU_LAYERS
   });
 
-  context = new LlamaContext({
+  context = new Context({
     model,
     batchSize: LLAMACPP_BATCH_SIZE,
     gpuLayers: LLAMACPP_GPU_LAYERS
   });
-
-  ChatSession = LlamaChatSession;
 })();
 
 /* * * * * * * * * * * * * * * * * * * *
@@ -185,7 +189,11 @@ const Ragdoll = async config => {
   const { default: terminalImage } = await import('terminal-image');
 
   session = new ChatSession({
-    context,
+    context: new Context({
+      model: { ...model },
+      batchSize: LLAMACPP_BATCH_SIZE,
+      gpuLayers: LLAMACPP_GPU_LAYERS
+    }),
     systemPrompt: ragdollPromptPrefix
   });
 
@@ -228,13 +236,17 @@ const Ragdoll = async config => {
       ...model,
 
       complete: model.complete || (async ({ prompt }) => {
-        const text = await vectorChatSession.prompt(prompt);
+        const text = await vectorChatSession.prompt(
+          prompt
+        );
 
         return { text };
       }),
 
       chat: model.chat || (async ({ messages }) => {
-        const message = await vectorChatSession.prompt(messages[0].content);
+        const message = await vectorChatSession.prompt(
+          messages[0].content
+        );
 
         return { message };
       })
@@ -359,7 +371,13 @@ const Ragdoll = async config => {
       }
 
       try {
-        const textModelResponse = await session.prompt(message);
+        const textModelResponse = await session.prompt(
+          message,
+          {
+            temperature: 0.5,
+            trimWhitespaceSuffix: true
+          }
+        );
 
         messageResponse = `${textModelResponse}`;
 
