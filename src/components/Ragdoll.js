@@ -102,12 +102,16 @@ let ChatSession = () => {};
   } = await import('node-llama-cpp');
 
   model = new LlamaModel({
-    modelPath
+    modelPath,
+    gpuLayers: 8,
+    useMmap: false
   });
 
   context = new LlamaContext({
     model,
-    batchSize: TEXT_MODEL_BATCH_SIZE
+    batchSize: TEXT_MODEL_BATCH_SIZE,
+    gpuLayers: 8,
+    threads: 1
   });
 
   ChatSession = LlamaChatSession;
