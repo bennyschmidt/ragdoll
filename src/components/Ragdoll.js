@@ -58,7 +58,8 @@ const {
   CONFIG_ERROR_NAME,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
-  TEXT_MODEL_BATCH_SIZE,
+  LLAMACPP_BATCH_SIZE,
+  LLAMACPP_GPU_LAYERS,
   llmLogPrefix,
   textTextModel,
   textModelLogPrefix,
@@ -103,13 +104,13 @@ let ChatSession = () => {};
 
   model = new LlamaModel({
     modelPath,
-    gpuLayers: 16
+    gpuLayers: LLAMACPP_GPU_LAYERS
   });
 
   context = new LlamaContext({
     model,
-    batchSize: TEXT_MODEL_BATCH_SIZE,
-    gpuLayers: 16
+    batchSize: LLAMACPP_BATCH_SIZE,
+    gpuLayers: LLAMACPP_GPU_LAYERS
   });
 
   ChatSession = LlamaChatSession;

@@ -27,7 +27,7 @@ const {
   GOODBYE,
   BYE,
   EXIT,
-  TEXT_MODEL_BATCH_SIZE,
+  LLAMACPP_BATCH_SIZE,
   textTextModel,
   textModelLogPrefix,
   waiting
@@ -80,7 +80,7 @@ const RagdollCommandLine = async config => {
 
   const context = new LlamaContext({
     model,
-    batchSize: TEXT_MODEL_BATCH_SIZE,
+    batchSize: LLAMACPP_BATCH_SIZE,
     gpuLayers: 16
   });
 
