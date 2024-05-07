@@ -103,15 +103,13 @@ let ChatSession = () => {};
 
   model = new LlamaModel({
     modelPath,
-    gpuLayers: 8,
-    useMmap: false
+    gpuLayers: 16
   });
 
   context = new LlamaContext({
     model,
     batchSize: TEXT_MODEL_BATCH_SIZE,
-    gpuLayers: 8,
-    threads: 1
+    gpuLayers: 16
   });
 
   ChatSession = LlamaChatSession;

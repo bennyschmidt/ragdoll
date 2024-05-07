@@ -112,6 +112,36 @@ STORAGE_URI=./.tmp
 ```
 -----
 
+### Install CUDA
+
+For NVIDIA GPU support (optional).
+
+1. Download & install [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads)
+
+2. Reboot: `sudo reboot`
+
+3. Setup CUDA env in the Ragdoll repo:
+
+`export CUDACXX=/usr/local/cuda-12/bin/nvcc`
+
+where `cuda-12` is your cuda version (needs 12+). Also set these:
+
+`CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1`
+
+4. Build `node-llama-cpp`:
+
+`npx --no node-llama-cpp download --cuda`
+
+You should see it build in the Terminal, now when running Ragdoll the `gpuLayers` param will work for `LlamaModel`. When starting Ragdoll, the `node-llama-cpp` logs will now show:
+
+```
+llm_load_tensors: offloading 8 repeating layers to GPU
+llm_load_tensors: offloaded 8/33 layers to GPU
+llm_load_tensors:  CUDA_Host buffer size =  2981.62 MiB
+```
+
+There are troubleshooting steps in the [node-llama-cpp CUDA guide](https://withcatai.github.io/node-llama-cpp/guide/CUDA).
+
 ### Install Stable Diffusion
 
 For image support (optional).
