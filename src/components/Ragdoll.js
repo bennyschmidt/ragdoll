@@ -58,7 +58,9 @@ const {
   CONFIG_ERROR_NAME,
   CONFIG_ERROR_WRITING_STYLE,
   CONFIG_ERROR_QUERY,
+  LLAMACPP_CONTEXT_SIZE,
   LLAMACPP_BATCH_SIZE,
+  LLAMACPP_MAX_TOKENS,
   LLAMACPP_GPU_LAYERS,
   llmLogPrefix,
   textTextModel,
@@ -87,37 +89,22 @@ const {
 
 const modelPath = `${__dirname}/../models/gguf/mistral-7b-v0.1.Q4_0.gguf`;
 
-let Model = () => {};
-let Context = () => {};
-let ChatSession = () => {};
-
-let model;
-let context;
-let session;
+let LlamaModel = () => {};
+let LlamaContext = () => {};
+let LlamaChatSession = () => {};
 
 // Run LlamaCpp
 
 (async () => {
   const {
-    LlamaModel,
-    LlamaContext,
-    LlamaChatSession
+    LlamaModel: Model,
+    LlamaContext: Context,
+    LlamaChatSession: Session
   } = await import('node-llama-cpp');
 
-  Model = LlamaModel;
-  Context = LlamaContext;
-  ChatSession = LlamaChatSession;
-
-  model = new Model({
-    modelPath,
-    gpuLayers: LLAMACPP_GPU_LAYERS
-  });
-
-  context = new Context({
-    model,
-    batchSize: LLAMACPP_BATCH_SIZE,
-    gpuLayers: LLAMACPP_GPU_LAYERS
-  });
+  LlamaModel = Model;
+  LlamaContext = Context;
+  LlamaChatSession = Session;
 })();
 
 /* * * * * * * * * * * * * * * * * * * *
@@ -188,12 +175,22 @@ const Ragdoll = async config => {
 
   const { default: terminalImage } = await import('terminal-image');
 
-  session = new ChatSession({
-    context: new Context({
-      model: { ...model },
-      batchSize: LLAMACPP_BATCH_SIZE,
-      gpuLayers: LLAMACPP_GPU_LAYERS
-    }),
+  const model = new LlamaModel({
+    modelPath,
+    gpuLayers: LLAMACPP_GPU_LAYERS
+  });
+
+  const context = new LlamaContext({
+    model,
+    contextSize: LLAMACPP_CONTEXT_SIZE,
+    batchSize: LLAMACPP_BATCH_SIZE,
+    gpuLayers: LLAMACPP_GPU_LAYERS
+  });
+
+  const session = new LlamaChatSession({
+    context,
+    contextSize: LLAMACPP_CONTEXT_SIZE,
+    batchSize: LLAMACPP_BATCH_SIZE,
     systemPrompt: ragdollPromptPrefix
   });
 
@@ -228,24 +225,40 @@ const Ragdoll = async config => {
   const createIndex = async text => {
     // Internal chat wrapper
 
-    const vectorChatSession = new ChatSession({
-      context
+    const storeModel = await new LlamaModel({
+      modelPath,
+      gpuLayers: LLAMACPP_GPU_LAYERS
+    });
+
+    const storeContext = await new LlamaContext({
+      model,
+      contextSize: LLAMACPP_CONTEXT_SIZE,
+      batchSize: LLAMACPP_BATCH_SIZE,
+      gpuLayers: LLAMACPP_GPU_LAYERS
+    });
+
+    const storeSession = new LlamaChatSession({
+      context: storeContext,
+      contextSize: LLAMACPP_CONTEXT_SIZE,
+      batchSize: LLAMACPP_BATCH_SIZE
     });
 
     const chatWrapper = {
-      ...model,
+      ...storeModel,
 
-      complete: model.complete || (async ({ prompt }) => {
-        const text = await vectorChatSession.prompt(
-          prompt
+      complete: storeModel.complete || (async ({ prompt }) => {
+        const text = await storeSession.prompt(
+          prompt,
+          { maxTokens: LLAMACPP_MAX_TOKENS }
         );
 
         return { text };
       }),
 
-      chat: model.chat || (async ({ messages }) => {
-        const message = await vectorChatSession.prompt(
-          messages[0].content
+      chat: storeModel.chat || (async ({ messages }) => {
+        const message = await storeSession.prompt(
+          messages[0].content,
+          { maxTokens: LLAMACPP_MAX_TOKENS }
         );
 
         return { message };
@@ -373,10 +386,7 @@ const Ragdoll = async config => {
       try {
         const textModelResponse = await session.prompt(
           message,
-          {
-            temperature: 0.5,
-            trimWhitespaceSuffix: true
-          }
+          { maxTokens: LLAMACPP_MAX_TOKENS }
         );
 
         messageResponse = `${textModelResponse}`;

@@ -27,7 +27,9 @@ const {
   GOODBYE,
   BYE,
   EXIT,
+  LLAMACPP_CONTEXT_SIZE,
   LLAMACPP_BATCH_SIZE,
+  LLAMACPP_MAX_TOKENS,
   LLAMACPP_GPU_LAYERS,
   textTextModel,
   textModelLogPrefix,
@@ -81,13 +83,9 @@ const RagdollCommandLine = async config => {
 
   const context = new LlamaContext({
     model,
+    contextSize: LLAMACPP_CONTEXT_SIZE,
     batchSize: LLAMACPP_BATCH_SIZE,
     gpuLayers: LLAMACPP_GPU_LAYERS
-  });
-
-  const session = new LlamaChatSession({
-    context,
-    systemPrompt: povPromptPrefix
   });
 
   const ui = readline.createInterface({
@@ -120,6 +118,13 @@ const RagdollCommandLine = async config => {
       return;
     }
 
+    const session = new LlamaChatSession({
+      context,
+      contextSize: LLAMACPP_CONTEXT_SIZE,
+      batchSize: LLAMACPP_BATCH_SIZE,
+      systemPrompt: povPromptPrefix
+    });
+
     const inputLowerCase = input.toLowerCase();
 
     if (inputLowerCase === BYE || inputLowerCase === EXIT) {
@@ -145,7 +150,10 @@ const RagdollCommandLine = async config => {
         log(`${textModelLogPrefix} ${message}`);
       }
 
-      const textModelResponse = await session.prompt(message, { trimWhitespaceSuffix: true });
+      const textModelResponse = await session.prompt(
+        message,
+        { maxTokens: LLAMACPP_MAX_TOKENS }
+      );
 
       messageResponse = textModelResponse;
 

@@ -92,8 +92,10 @@ Set up the environment. No API keys needed!
 RAG_ENGINE=LlamaIndex
 TEXT_TEXT_MODEL=mistral
 TEXT_IMAGE_MODEL=txt2img
+LLAMACPP_CONTEXT_SIZE=4096
 LLAMACPP_BATCH_SIZE=4096
-LLAMACPP_GPU_LAYERS=16
+LLAMACPP_MAX_TOKENS=2048
+LLAMACPP_GPU_LAYERS=2
 IMAGE_MODEL_PROVIDER=Stable Diffusion
 IMAGE_MODEL_URI=http://localhost:7860
 IMAGE_IMAGE_MODEL=img2img
@@ -110,6 +112,7 @@ CACHE=false
 MAX_STORAGE_KEY_LENGTH=32
 LOG_PREFIX=<Ragdoll>
 STORAGE_URI=./.tmp
+
 ```
 -----
 
@@ -133,12 +136,13 @@ where `cuda-12` is your cuda version (needs 12+). Also set these:
 
 `npx --no node-llama-cpp download --cuda`
 
-You should see it build in the Terminal, now when running Ragdoll the `gpuLayers` param will work for `LlamaModel`. When starting Ragdoll, the `node-llama-cpp` logs will now show:
+You should see it build in the Terminal, now when running Ragdoll the `gpuLayers` param will work. When starting Ragdoll, the `node-llama-cpp` logs will now show something like:
 
 ```
-llm_load_tensors: offloading 8 repeating layers to GPU
-llm_load_tensors: offloaded 8/33 layers to GPU
-llm_load_tensors:  CUDA_Host buffer size =  2981.62 MiB
+llm_load_tensors: offloading 2 repeating layers to GPU
+llm_load_tensors: offloaded 2/33 layers to GPU
+llm_load_tensors:        CPU buffer size =  3917.87 MiB
+llm_load_tensors:      CUDA0 buffer size =   234.06 MiB
 ```
 
 There are troubleshooting steps in the [node-llama-cpp CUDA guide](https://withcatai.github.io/node-llama-cpp/guide/CUDA).
