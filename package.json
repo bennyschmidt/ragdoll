@@ -1,6 +1,6 @@
 {
   "name": "ragdoll-core",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "main": "index.js",
   "dependencies": {
     "dotenv": "^16.4.5",

@@ -10,8 +10,8 @@ const prefixOutputImage = ({ artStyle }) => (
   `Render the following message in the style of ${artStyle}, that is highly-produced like great-quality CGI, hand-painted art, or HD cinematics, depicting clear imagery and relevant features in an visually impressive way. Here is the message:`
 );
 
-const prefixSVG = ({ query }) => (
-  `Barely modify some of the values of some of the attributes in this SVG code, leaving some of them unchanged, to depict a slightly different image that looks more like a ${query}. Here is the code:`
+const prefixSVG = ({ artStyle, query, svg }) => (
+  `Output SVG code of an image in the style of ${artStyle} depicting ${query}, referencing the following SVG code for stroke and fill styles: ${svg}.`
 );
 
 module.exports = {
